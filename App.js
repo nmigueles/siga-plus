@@ -1,41 +1,34 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { StatusBar } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const HomeScreen = props => {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-
-      <TouchableOpacity onPress={() => props.navigation.navigate('Details')}>
-        <Text>Go to Details Screen</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const DetailsScreen = () => {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-    </View>
-  );
-};
+import LoginScreen from './src/screens/Login';
+import HomeScreen from './src/screens/Home';
+import DetailsScreen from './src/screens/Details';
 
 const RootStack = createStackNavigator(
   {
     Home: HomeScreen,
+    Login: LoginScreen,
     Details: DetailsScreen,
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Login',
   },
 );
 
 const AppContainer = createAppContainer(RootStack);
 
 export default App = () => {
-  return <AppContainer />;
+  return (
+    <>
+      <StatusBar
+        translucent
+        backgroundColor="rgba(0,0,0,0)"
+        barStyle="dark-content"
+      />
+      <AppContainer />
+    </>
+  );
 };
