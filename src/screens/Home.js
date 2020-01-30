@@ -21,7 +21,7 @@ const HomeScreen = props => {
 
 HomeScreen.navigationOptions = ({ navigation }) => {
   return {
-    title: navigation.getParam('otherParam', 'A Nested Details Screen'),
+    title: 'SIGA',
   };
 };
 

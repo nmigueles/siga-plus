@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function FormLogin() {
+export default function FormLogin(props) {
   let secondInput = null;
 
   return (
@@ -48,7 +48,11 @@ export default function FormLogin() {
           secondInput = input;
         }}
       />
-      <Ingresar title={'Ingresar'} style={{ marginTop: 20 }} />
+      <Ingresar
+        title={'Ingresar'}
+        onPress={props.onPress}
+        style={{ marginTop: 20 }}
+      />
     </View>
   );
 }

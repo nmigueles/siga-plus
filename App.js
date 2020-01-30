@@ -1,5 +1,4 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
@@ -15,6 +14,11 @@ const RootStack = createStackNavigator(
   },
   {
     initialRouteName: 'Login',
+    defaultNavigationOptions: {
+      headerStyle: {
+        height: 60,
+      },
+    },
   },
 );
 
@@ -23,11 +27,6 @@ const AppContainer = createAppContainer(RootStack);
 export default App = () => {
   return (
     <>
-      <StatusBar
-        translucent
-        backgroundColor="rgba(0,0,0,0)"
-        barStyle="dark-content"
-      />
       <AppContainer />
     </>
   );
