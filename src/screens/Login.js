@@ -7,12 +7,19 @@ const styles = StyleSheet.create({
   formContainer: { flex: 1, marginBottom: 150 },
 });
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
+  const handleLogin = ({ user, pass }, setLoading, setErrorMessage) => {
+    // eslint-disable-next-line no-console
+    console.log({ user, pass });
+    setLoading(false);
+    setErrorMessage('Logeado');
+  };
+
   return (
     <>
       <Logo scale={15} />
       <View style={styles.formContainer}>
-        <FormLogin onPress={() => navigation.navigate('Home')} />
+        <FormLogin handleLogin={handleLogin} />
       </View>
     </>
   );

@@ -1,5 +1,8 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import PropTypes from 'prop-types';
+import { TouchableOpacity, StyleSheet, Text, ActivityIndicator } from 'react-native';
+
+import Colors from '../constants/colors';
 
 const styles = StyleSheet.create({
   button: {
@@ -8,8 +11,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-
-    backgroundColor: 'rgba(0,0,0,0.78)',
+    backgroundColor: Colors.main,
   },
 
   text: {
@@ -19,12 +21,28 @@ const styles = StyleSheet.create({
   },
 });
 
-export const CustomButton = props => {
-  const { title = 'Enter', style = {}, textStyle = {}, onPress } = props;
-
-  return (
-    <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
+const CustomButton = ({
+  title = 'Enter',
+  style = {},
+  textStyle = {},
+  onPress,
+  loading = false,
+}) => (
+  <TouchableOpacity disabled={loading} onPress={onPress} style={[styles.button, style]}>
+    {loading ? (
+      <ActivityIndicator size="small" color={Colors.white2} />
+    ) : (
       <Text style={[styles.text, textStyle]}>{title}</Text>
-    </TouchableOpacity>
-  );
+    )}
+  </TouchableOpacity>
+);
+
+CustomButton.propTypes = {
+  title: PropTypes.string,
+  style: PropTypes.object,
+  textStyle: PropTypes.object,
+  onPress: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
+
+export default CustomButton;

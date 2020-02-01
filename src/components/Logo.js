@@ -1,5 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Image, StyleSheet, StatusBar } from 'react-native';
+
+const logo = require('../img/utn.png');
 
 const styles = StyleSheet.create({
   logoContainer: {
@@ -13,14 +16,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Logo(props) {
-  const scale = props.scale * 0.01 || 0.15;
+function Logo({ scale }) {
   return (
     <View style={styles.logoContainer}>
       <Image
-        style={{ ...styles.logo, transform: [{ scale: scale }] }}
-        source={require('../img/utn.png')}
+        style={{ ...styles.logo, transform: [{ scale: scale ? scale * 0.01 : 0.15 }] }}
+        source={logo}
       />
     </View>
   );
 }
+
+Logo.propTypes = {
+  scale: PropTypes.number,
+};
+
+export default Logo;
