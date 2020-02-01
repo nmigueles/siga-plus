@@ -13,21 +13,22 @@ const RootStack = createStackNavigator(
     Details: DetailsScreen,
   },
   {
-    initialRouteName: 'Login',
+    initialRouteName: 'Home',
     defaultNavigationOptions: {
       headerStyle: {
         height: 60,
       },
     },
-  },
+  }
 );
 
 const AppContainer = createAppContainer(RootStack);
 
-export default App = () => {
+const App = () => {
   return (
     <>
       <AppContainer />
     </>
   );
 };
+export default App;

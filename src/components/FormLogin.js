@@ -44,6 +44,7 @@ function FormLogin({ handleLogin }) {
     setLoading(true);
     setErrorMessage('');
     handleLogin({ user, pass }, setLoading, setErrorMessage);
+    setPass('');
   };
 
   let secondInput = null;

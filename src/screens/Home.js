@@ -1,29 +1,35 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { View, Text, Button } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useEffect } from 'react';
+import { View, Text, BackHandler } from 'react-native';
+import Logo from '../components/Logo';
 
-const HomeScreen = props => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Home Screen</Text>
+const HomeScreen = () => {
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => true);
+  }, []);
 
-    <TouchableOpacity onPress={() => props.navigation.navigate('Details')}>
-      <Text>Go to Details Screen</Text>
-    </TouchableOpacity>
-
-    <Button
-      title="Update the title"
-      onPress={() => props.navigation.setParams({ otherParam: 'Updated!' })}
-    />
-  </View>
-);
-
-HomeScreen.propTypes = {
-  navigation: PropTypes.any,
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+    </View>
+  );
 };
 
 HomeScreen.navigationOptions = () => ({
   title: 'SIGA',
+  // eslint-disable-next-line react/display-name
+  headerLeft: () => (
+    <Logo
+      scale={4}
+      style={{
+        heigth: 80,
+        width: 40,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 10,
+      }}
+    />
+  ),
 });
 
 export default HomeScreen;
