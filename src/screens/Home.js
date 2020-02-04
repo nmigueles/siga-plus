@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { View, Text, BackHandler } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import Logo from '../components/Logo';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => true);
   }, []);
@@ -10,14 +12,18 @@ const HomeScreen = () => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home Screen</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Login', { logout: true })}>
+        <Text>Cerrar sesión</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 HomeScreen.navigationOptions = () => ({
   title: 'SIGA',
+  headerLeft: () => null,
   // eslint-disable-next-line react/display-name
-  headerLeft: () => (
+  headerRigth: () => (
     <Logo
       scale={4}
       style={{
@@ -27,6 +33,7 @@ HomeScreen.navigationOptions = () => ({
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 10,
+        backgroundColor: 'pink',
       }}
     />
   ),

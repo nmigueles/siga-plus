@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
@@ -34,17 +34,22 @@ const styles = StyleSheet.create({
   },
 });
 
-function FormLogin({ handleLogin }) {
+function FormLogin({ handleLogin, reload }) {
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
+  const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  if (reload) {
+    setUser('');
+    setPass('');
+  }
 
   const onSubmit = () => {
     setLoading(true);
     setErrorMessage('');
-    handleLogin({ user, pass }, setLoading, setErrorMessage);
-    setPass('');
+    handleLogin({ user, pass }, setLoading, setErrorMessage, setDone);
   };
 
   let secondInput = null;
@@ -81,6 +86,7 @@ function FormLogin({ handleLogin }) {
       />
       <Ingresar
         title={'Ingresar'}
+        done={done}
         loading={loading}
         onPress={onSubmit}
         style={{ marginTop: 20 }}

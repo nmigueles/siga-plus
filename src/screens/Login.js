@@ -16,14 +16,23 @@ const styles = StyleSheet.create({
 });
 
 const LoginScreen = ({ navigation }) => {
-  const handleLogin = ({ user, pass }, setLoading, setErrorMessage) => {
+  if (navigation.state.params) console.log(navigation.state.params.logout);
+  const handleLogin = async ({ user, pass }, setLoading, setErrorMessage, setDone) => {
     if (user === '' || pass === '') {
       setErrorMessage('Los campos no pueden estar vacios.');
       setLoading(false);
       return;
     }
-    setLoading(false);
-    navigation.navigate('Home');
+    // Simulate api loading response.
+
+    setTimeout(() => {
+      setLoading(false);
+      setDone(true);
+      setTimeout(() => {
+        navigation.navigate('Home');
+        setDone(false);
+      }, 800);
+    }, 2000);
   };
 
   return (

@@ -1,10 +1,14 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, StyleSheet, Text, ActivityIndicator } from 'react-native';
-
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/colors';
 
 const styles = StyleSheet.create({
+  done: {
+    backgroundColor: Colors.success,
+  },
   button: {
     display: 'flex',
     height: 45,
@@ -26,11 +30,18 @@ const CustomButton = ({
   style = {},
   textStyle = {},
   onPress,
+  done,
   loading = false,
 }) => (
-  <TouchableOpacity disabled={loading} onPress={onPress} style={[styles.button, style]}>
+  <TouchableOpacity
+    disabled={loading || done}
+    onPress={onPress}
+    style={[styles.button, style, done ? styles.done : null]}
+  >
     {loading ? (
       <ActivityIndicator size="small" color={Colors.white2} />
+    ) : done ? (
+      <Ionicons name="md-checkmark" color="white" size={20} />
     ) : (
       <Text style={[styles.text, textStyle]}>{title}</Text>
     )}
@@ -40,6 +51,7 @@ const CustomButton = ({
 CustomButton.propTypes = {
   title: PropTypes.string,
   style: PropTypes.object,
+  done: PropTypes.bool,
   textStyle: PropTypes.object,
   onPress: PropTypes.func.isRequired,
   loading: PropTypes.bool,

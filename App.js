@@ -13,7 +13,7 @@ const RootStack = createStackNavigator(
     Details: DetailsScreen,
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Login',
     defaultNavigationOptions: {
       headerStyle: {
         height: 60,
