@@ -34,17 +34,21 @@ const styles = StyleSheet.create({
   },
 });
 
-function FormLogin({ handleLogin, reload }) {
+function FormLogin({ handleLogin, cleanForm }) {
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  if (reload) {
+  const cleanImputs = () => {
     setUser('');
     setPass('');
-  }
+  };
+
+  useEffect(() => {
+    cleanForm(cleanImputs);
+  }, []);
 
   const onSubmit = () => {
     setLoading(true);

@@ -16,7 +16,12 @@ const styles = StyleSheet.create({
 });
 
 const LoginScreen = ({ navigation }) => {
-  if (navigation.state.params) console.log(navigation.state.params.logout);
+  const logout = navigation.getParam('logout', false);
+  console.log(logout);
+
+  const cleanForm = cleanInputs => {
+    cleanInputs();
+  };
   const handleLogin = async ({ user, pass }, setLoading, setErrorMessage, setDone) => {
     if (user === '' || pass === '') {
       setErrorMessage('Los campos no pueden estar vacios.');
@@ -39,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
     <>
       <Logo scale={15} style={styles.logoContainer} />
       <View style={styles.formContainer}>
-        <FormLogin handleLogin={handleLogin} />
+        <FormLogin cleanForm={cleanForm} handleLogin={handleLogin} />
       </View>
     </>
   );
