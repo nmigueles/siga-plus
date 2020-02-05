@@ -1,42 +1,30 @@
-import React, { useEffect } from 'react';
-import { View, Text, BackHandler } from 'react-native';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View, Text, StatusBar, AsyncStorage } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import Logo from '../components/Logo';
+import Colors from '../constants/colors';
 
 const HomeScreen = ({ navigation }) => {
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => true);
-  }, []);
+  StatusBar.setBackgroundColor(Colors.white);
+
+  const signOut = async () => {
+    await AsyncStorage.clear();
+    navigation.navigate('Login');
+  };
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home Screen</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('Login', { logout: true })}>
+      <TouchableOpacity onPress={signOut}>
         <Text>Cerrar sesión</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-HomeScreen.navigationOptions = () => ({
-  title: 'SIGA',
-  headerLeft: () => null,
-  // eslint-disable-next-line react/display-name
-  headerRigth: () => (
-    <Logo
-      scale={4}
-      style={{
-        heigth: 80,
-        width: 40,
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: 10,
-        backgroundColor: 'pink',
-      }}
-    />
-  ),
-});
+HomeScreen.propTypes = {
+  navigation: PropTypes.any,
+};
 
 export default HomeScreen;

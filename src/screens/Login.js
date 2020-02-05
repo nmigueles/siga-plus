@@ -1,11 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, StatusBar } from 'react-native';
+import { StyleSheet, View, StatusBar, AsyncStorage } from 'react-native';
 
 import Logo from '../components/Logo';
+import Colors from '../constants/colors';
 import FormLogin from '../components/FormLogin';
 
 const styles = StyleSheet.create({
+  Main: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.grey,
+  },
   formContainer: { flex: 1, marginBottom: 150 },
   logoContainer: {
     marginTop: StatusBar.currentHeight,
@@ -16,37 +23,37 @@ const styles = StyleSheet.create({
 });
 
 const LoginScreen = ({ navigation }) => {
-  const logout = navigation.getParam('logout', false);
-  console.log(logout);
+  StatusBar.setBackgroundColor(Colors.grey);
 
-  const cleanForm = cleanInputs => {
-    cleanInputs();
+  const signIn = async () => {
+    await AsyncStorage.setItem('userToken', 'test');
+    navigation.navigate('App');
   };
+
   const handleLogin = async ({ user, pass }, setLoading, setErrorMessage, setDone) => {
     if (user === '' || pass === '') {
       setErrorMessage('Los campos no pueden estar vacios.');
       setLoading(false);
       return;
     }
-    // Simulate api loading response.
 
+    // Simulate api loading response.
     setTimeout(() => {
       setLoading(false);
       setDone(true);
       setTimeout(() => {
-        navigation.navigate('Home');
-        setDone(false);
+        signIn();
       }, 800);
     }, 2000);
   };
 
   return (
-    <>
+    <View style={styles.Main}>
       <Logo scale={15} style={styles.logoContainer} />
       <View style={styles.formContainer}>
-        <FormLogin cleanForm={cleanForm} handleLogin={handleLogin} />
+        <FormLogin handleLogin={handleLogin} />
       </View>
-    </>
+    </View>
   );
 };
 

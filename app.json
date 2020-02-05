@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "siga-frba-app",
-    "slug": "siga-frba-app",
+    "name": "SIGA UTN",
+    "slug": "SIGA",
     "privacy": "public",
     "sdkVersion": "36.0.0",
-    "platforms": ["ios", "android"],
-    "version": "1.0.0",
+    "platforms": ["android"],
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,12 +17,13 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true
-    },
     "androidStatusBar": {
       "backgroundColor": "#ffffff",
       "barStyle": "dark-content"
+    },
+    "android": {
+      "package": "com.nmigueles.siga",
+      "versionCode": 1
     }
   }
 }

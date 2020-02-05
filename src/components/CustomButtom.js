@@ -30,7 +30,7 @@ const CustomButton = ({
   style = {},
   textStyle = {},
   onPress,
-  done,
+  done = false,
   loading = false,
 }) => (
   <TouchableOpacity
@@ -51,10 +51,10 @@ const CustomButton = ({
 CustomButton.propTypes = {
   title: PropTypes.string,
   style: PropTypes.object,
-  done: PropTypes.bool,
   textStyle: PropTypes.object,
-  onPress: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  done: PropTypes.bool,
+  onPress: PropTypes.func.isRequired,
 };
 
 export default CustomButton;
