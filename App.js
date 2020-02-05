@@ -1,9 +1,9 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator, TransitionPresets } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { Ionicons } from '@expo/vector-icons';
-
+import { Icon } from 'native-base';
 import HomeScreen from './src/screens/Home';
 import LoginScreen from './src/screens/Login';
 import CursadaScreen from './src/screens/Cursada';
@@ -17,8 +17,8 @@ const defaultNavigationOptions = ({ navigation }) => ({
   safeAreaInsets: { top: 0 },
   // eslint-disable-next-line react/display-name
   headerLeft: () => (
-    <Ionicons
-      name="md-menu"
+    <Icon
+      name="menu"
       size={35}
       style={{
         marginLeft: 20,
@@ -27,19 +27,20 @@ const defaultNavigationOptions = ({ navigation }) => ({
     />
   ),
   // eslint-disable-next-line react/display-name
-  headerRight: () => (
-    <Logo
-      scale={4}
-      style={{
-        heigth: 80,
-        width: 40,
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 10,
-      }}
-    />
-  ),
+  // headerRight: () => (
+  //   <Logo
+  //     scale={4}
+  //     style={{
+  //       heigth: 80,
+  //       width: 40,
+  //       flex: 1,
+  //       alignItems: 'center',
+  //       justifyContent: 'center',
+  //       marginRight: 10,
+  //     }}
+  //   />
+  // ),
+  ...TransitionPresets.SlideFromRightIOS,
 });
 
 const HomeStack = createStackNavigator(

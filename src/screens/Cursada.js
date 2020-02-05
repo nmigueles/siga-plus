@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import Asignatura from '../components/Asignatura';
 import Colors from '../constants/colors';
+import asignaturas from '../constants/asignaturas';
+
+import Asignatura from '../components/Asignatura';
 import Horarios from '../components/Horarios';
 
 const style = StyleSheet.create({
@@ -22,27 +24,6 @@ const style = StyleSheet.create({
     marginBottom: 40,
   },
 });
-
-const asignaturas = [
-  {
-    id: 1,
-    nombre: 'Ingeniería Civil',
-    color: '#ffcc00',
-    notas: ['6', '8'],
-  },
-  {
-    id: 2,
-    nombre: 'Física 2',
-    color: '#ff6666',
-    notas: ['6', '8'],
-  },
-  {
-    id: 3,
-    nombre: 'Análisis Matemático 1',
-    color: '#66cccc',
-    notas: ['6', '8'],
-  },
-];
 
 const CursadaScreen = ({ navigation }) => (
   <ScrollView>
