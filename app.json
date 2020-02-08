@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "SIGA UTN",
-    "slug": "SIGA",
+    "name": "SIGA+",
+    "slug": "SIGAPlus",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": ["android"],
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -24,6 +24,9 @@
     "android": {
       "package": "com.nmigueles.siga",
       "versionCode": 1
+    },
+    "nofitication": {
+      "icon": "./assets/utn-push.png"
     }
   }
 }
