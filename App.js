@@ -2,15 +2,13 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator, TransitionPresets } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
-import { Ionicons } from '@expo/vector-icons';
 import { Icon } from 'native-base';
+
 import HomeScreen from './src/screens/Home';
 import LoginScreen from './src/screens/Login';
 import CursadaScreen from './src/screens/Cursada';
 import AuthLoadingScreen from './src/screens/AuthLoading';
 import AsignaturaScreen from './src/screens/Asignatura';
-
-import Logo from './src/components/Logo';
 
 const defaultNavigationOptions = ({ navigation }) => ({
   headerTitleAlign: 'center',
