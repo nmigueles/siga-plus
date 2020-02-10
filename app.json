@@ -5,7 +5,7 @@
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": ["android"],
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -25,7 +25,7 @@
       "package": "com.nmigueles.siga",
       "versionCode": 1
     },
-    "nofitication": {
+    "notification": {
       "icon": "./assets/utn-push.png"
     }
   }
