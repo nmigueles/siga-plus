@@ -24,20 +24,6 @@ const defaultNavigationOptions = ({ navigation }) => ({
       onPress={() => navigation.openDrawer()}
     />
   ),
-  // eslint-disable-next-line react/display-name
-  // headerRight: () => (
-  //   <Logo
-  //     scale={4}
-  //     style={{
-  //       heigth: 80,
-  //       width: 40,
-  //       flex: 1,
-  //       alignItems: 'center',
-  //       justifyContent: 'center',
-  //       marginRight: 10,
-  //     }}
-  //   />
-  // ),
   ...TransitionPresets.SlideFromRightIOS,
 });
 
