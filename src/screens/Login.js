@@ -9,13 +9,12 @@ import FormLogin from '../components/FormLogin';
 const styles = StyleSheet.create({
   Main: {
     flex: 1,
-    width: '100%',
-    height: '100%',
     backgroundColor: Colors.grey,
   },
-  formContainer: { flex: 1, marginBottom: 150 },
+  formContainer: { flex: 1, marginBottom: 175 },
   logoContainer: {
     marginTop: StatusBar.currentHeight,
+    marginBottom: 20,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

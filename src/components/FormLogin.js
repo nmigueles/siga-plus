@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 import Colors from '../constants/colors';
 import Ingresar from './CustomButtom';
+import MessageBox from './MessageBox';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,9 +29,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   message: {
-    color: Colors.error,
-    fontWeight: 'bold',
+    borderRadius: 5,
     marginBottom: 10,
+    paddingLeft: 20,
+    paddingVertical: 10,
   },
 });
 
@@ -51,7 +53,12 @@ function FormLogin({ handleLogin }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.message}>{errorMessage}</Text>
+      <MessageBox
+        style={styles.message}
+        opacity={errorMessage ? 1 : 0}
+        message={errorMessage}
+        type={'error'}
+      />
       <TextInput
         name="user"
         value={user}

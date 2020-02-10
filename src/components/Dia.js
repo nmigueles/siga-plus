@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet, Text } from 'react-native';
 
 import Colors from '../constants/colors';
+import Dot from './Dot';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,30 +24,10 @@ const styles = StyleSheet.create({
     width: 55,
     marginRight: 10,
   },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginHorizontal: 0.7,
-  },
   row: {
     flexDirection: 'row',
   },
 });
-
-const Dot = ({ state, color = '#fff' }) => (
-  <View
-    style={[
-      styles.dot,
-      state ? { backgroundColor: color } : { backgroundColor: Colors.grey2 },
-    ]}
-  />
-);
-
-Dot.propTypes = {
-  color: PropTypes.string,
-  state: PropTypes.bool,
-};
 
 const Dia = ({ nombre, color, horas }) => (
   <View style={styles.container}>
