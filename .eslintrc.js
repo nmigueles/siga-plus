@@ -11,6 +11,7 @@ module.exports = {
     'comma-dangle': 'off',
     'arrow-parens': 'off',
     'object-curly-newline': 'off',
+    'operator-linebreak': 'off',
   },
   globals: {
     fetch: true,

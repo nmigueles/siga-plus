@@ -7,7 +7,7 @@ import { Icon, Row } from 'native-base';
 
 import Dot from './Dot';
 import Colors from '../constants/colors';
-import { Week, WeekDays, WeekFuture } from '../functions/getOrderedWeek';
+import { Week, WeekDays, WeekFuture } from '../utils/getOrderedWeek';
 
 const { width } = Dimensions.get('screen');
 const cardWidth = width * 0.6;
