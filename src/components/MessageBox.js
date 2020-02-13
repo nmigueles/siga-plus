@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     shadowOpacity: 0.2,
     shadowRadius: 2.22,
+    borderBottomColor: Colors.grey2,
+    borderBottomWidth: 0.8,
+    borderRadius: 5,
   },
   containerOptional: {
     width: widthBox,

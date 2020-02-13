@@ -7,28 +7,15 @@ import 'moment/locale/es-us';
 import TimeAgo from 'react-native-timeago';
 
 import Colors from '../constants/colors';
+import Styles from '../constants/styles';
+import Card from './Card';
+
 import getAsignaturasDelDia from '../utils/getAsignaturasDelDia';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginBottom: 15,
-  },
-  card: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    backgroundColor: Colors.white2,
-    borderBottomColor: Colors.grey2,
-    borderBottomWidth: 1,
-    borderRadius: 5,
-    padding: 10,
-    marginHorizontal: 20,
-    marginBottom: 5,
-  },
-  icon: {
-    fontSize: 15,
-    color: Colors.strongGrey,
-    marginTop: 3,
   },
   enCurso: {
     color: Colors.success,
@@ -55,11 +42,6 @@ const styles = StyleSheet.create({
     flex: 1,
     color: Colors.strongGrey,
     paddingBottom: 5,
-  },
-  error: {
-    color: Colors.strongGrey,
-    fontSize: 10,
-    lineHeight: 20,
   },
 });
 
@@ -118,13 +100,18 @@ const AsignaturaDelDia = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Hoy</Text>
+
       {loading && <ActivityIndicator />}
+
+      {!asignaturas.length && (
+        <Card message={'No hay ninguna asignatura hoy.'} icon="terrain" />
+      )}
       {!loading &&
-        asignaturas.map(({ id, nombre, aula, sede, horaC, horaT }) => {
+        asignaturas.map(({ id, nombre, aula, sede, hora: horaC, horaT }) => {
           try {
             const { termino, enCurso, hora } = getEstadoDeMateria(horaC, horaT);
             return (
-              <View key={id} style={[styles.card, { opacity: termino ? 0.4 : 1 }]}>
+              <View key={id} style={[Styles.card, { opacity: termino ? 0.4 : 1 }]}>
                 <Text style={styles.mainText}>{nombre}</Text>
                 <Row style={styles.row}>
                   <Text style={styles.subText}>{`Aula ${aula} - ${sede}`}</Text>
@@ -137,7 +124,7 @@ const AsignaturaDelDia = () => {
                       <Icon
                         name="timelapse"
                         type={'MaterialIcons'}
-                        style={[styles.icon, styles.enCurso]}
+                        style={[Styles.icon, styles.enCurso]}
                       />
                       <Text style={[styles.timeAgo, styles.enCurso]}>{'  en curso'}</Text>
                     </>
@@ -146,7 +133,7 @@ const AsignaturaDelDia = () => {
                       <Icon
                         name="access-time"
                         type={'MaterialIcons'}
-                        style={styles.icon}
+                        style={Styles.icon}
                       />
                       <Text style={styles.timeAgo}>
                         {'  '}
@@ -159,25 +146,7 @@ const AsignaturaDelDia = () => {
             );
           } catch (error) {
             return (
-              <View
-                key={id}
-                style={[
-                  styles.card,
-                  {
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                  },
-                ]}
-              >
-                <Icon
-                  name="error"
-                  type={'MaterialIcons'}
-                  style={[styles.icon, { marginHorizontal: 5 }]}
-                />
-                <Text
-                  style={styles.error}
-                >{`Error cargando la asignatura ${nombre}`}</Text>
-              </View>
+              <Card id={id} message={'Error cargando la asignatura'} nombre={nombre} />
             );
           }
         })}
