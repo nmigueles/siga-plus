@@ -30,23 +30,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const Asignatura = ({ navigation, nombre, color, notas }) => (
+const Asignatura = ({ navigation, asignatura }) => (
   <TouchableOpacity
     style={styles.container}
     onPress={() => {
-      navigation.navigate('Asignatura', { nombre, notas });
+      navigation.navigate('Asignatura', { asignatura });
     }}
   >
-    <Text style={styles.nameText}>{nombre}</Text>
-    <View style={[styles.dot, { backgroundColor: color }]} />
+    <Text style={styles.nameText}>{asignatura.nombre}</Text>
+    <View style={[styles.dot, { backgroundColor: asignatura.color }]} />
   </TouchableOpacity>
 );
 
 Asignatura.propTypes = {
   navigation: PropTypes.any,
-  color: PropTypes.string.isRequired,
-  nombre: PropTypes.string.isRequired,
-  notas: PropTypes.array.isRequired,
+  asignatura: PropTypes.object.isRequired,
 };
 
 Asignatura.displayName = 'Asignatura';

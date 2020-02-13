@@ -13,6 +13,7 @@ module.exports = {
     'object-curly-newline': 'off',
     'operator-linebreak': 'off',
     'no-nested-ternary': 'off',
+    'react/display-name': 'off',
   },
   globals: {
     fetch: true,

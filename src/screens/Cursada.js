@@ -36,14 +36,8 @@ const CursadaScreen = ({ navigation }) => (
     />
     <View style={style.cursadaContainer}>
       <Text style={style.text}>Cursada actual</Text>
-      {asignaturas.map(a => (
-        <Asignatura
-          key={a.id}
-          nombre={a.nombre}
-          color={a.color}
-          notas={a.notas}
-          navigation={navigation}
-        />
+      {asignaturas.map(asignatura => (
+        <Asignatura key={asignatura.id} asignatura={asignatura} navigation={navigation} />
       ))}
       <Text style={style.text}>Semana</Text>
       <Horario asignaturas={asignaturas} />
