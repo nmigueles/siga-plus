@@ -103,7 +103,7 @@ const AsignaturaDelDia = () => {
 
       {loading && <ActivityIndicator />}
 
-      {!asignaturas.length && (
+      {!loading && !asignaturas.length && (
         <Card message={'No hay ninguna asignatura hoy.'} icon="terrain" />
       )}
       {!loading &&

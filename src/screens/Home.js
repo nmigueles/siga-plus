@@ -9,11 +9,6 @@ import AsignaturaDelDia from '../components/AsignaturaDelDia';
 const HomeScreen = () => {
   StatusBar.setBackgroundColor(Colors.white);
 
-  // const signOut = async () => {
-  //   await AsyncStorage.clear();
-  //   navigation.navigate('Login');
-  // };
-
   return (
     <ScrollView>
       <MessageBox message="Este es un mensaje de alerta de prueba." type="alert" />

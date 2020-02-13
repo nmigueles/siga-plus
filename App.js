@@ -10,6 +10,8 @@ import CursadaScreen from './src/screens/Cursada';
 import AuthLoadingScreen from './src/screens/AuthLoading';
 import AsignaturaScreen from './src/screens/Asignatura';
 
+import CustomDrawer from './src/components/CustomDrawer';
+
 const defaultNavigationOptions = ({ navigation }) => ({
   headerTitleAlign: 'center',
   safeAreaInsets: { top: 0 },
@@ -41,14 +43,19 @@ const CursadaStack = createStackNavigator(
   { defaultNavigationOptions }
 );
 
-const DrawerNavigator = createDrawerNavigator({
-  Home: {
-    screen: HomeStack,
+const DrawerNavigator = createDrawerNavigator(
+  {
+    Home: {
+      screen: HomeStack,
+    },
+    Cursada: {
+      screen: CursadaStack,
+    },
   },
-  Cursada: {
-    screen: CursadaStack,
-  },
-});
+  {
+    contentComponent: CustomDrawer,
+  }
+);
 
 const RootStack = createSwitchNavigator(
   {
