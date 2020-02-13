@@ -12,6 +12,7 @@ module.exports = {
     'arrow-parens': 'off',
     'object-curly-newline': 'off',
     'operator-linebreak': 'off',
+    'no-nested-ternary': 'off',
   },
   globals: {
     fetch: true,

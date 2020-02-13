@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import { Row, Icon } from 'native-base';
 
-import TimeAgo from 'react-native-timeago';
 import moment from 'moment';
 import 'moment/locale/es-us';
+import TimeAgo from 'react-native-timeago';
 
 import Colors from '../constants/colors';
 import getAsignaturasDelDia from '../utils/getAsignaturasDelDia';
@@ -25,9 +25,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 5,
   },
-  iconTime: {
+  icon: {
     fontSize: 15,
     color: Colors.strongGrey,
+    marginTop: 3,
+  },
+  enCurso: {
+    color: Colors.success,
   },
   mainText: {
     fontSize: 25,
@@ -48,9 +52,54 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   timeAgo: {
+    flex: 1,
     color: Colors.strongGrey,
+    paddingBottom: 5,
+  },
+  error: {
+    color: Colors.strongGrey,
+    fontSize: 10,
+    lineHeight: 20,
   },
 });
+
+const getEstadoDeMateria = (horaC, horaT) => {
+  const durationString = moment
+    .duration(moment(`${horaC}00`, 'HHmmss').diff(moment(`${horaT}00`, 'HHmmss')))
+    .humanize();
+  const hora = moment(`${horaC}00`, 'HHmmss');
+  const fromNowString = moment(hora).fromNow();
+  const duration = /(\d\d|\d) (\w+)/g.exec(durationString).reverse();
+  const fromNow = /(\w+) (\d\d|\d|\w+) (\w+)/g.exec(fromNowString).reverse();
+
+  let termino = false;
+  let enCurso = false;
+
+  if (fromNow[2] === 'hace') {
+    const fromNowClean =
+      fromNow[1] === 'una' || fromNow[1] === 'un' ? 1 : Number(fromNow[1]);
+
+    if (fromNow[0] === duration[0]) {
+      // Estan en la misma escala
+      if (fromNowClean > Number(duration[1])) {
+        termino = true;
+      } else {
+        enCurso = true;
+      }
+    }
+    // No estan en la misma escala
+    if (fromNow[0] === 'minutos' && duration[0] === 'horas') {
+      const durationMinutes = Number(duration[1]) * 60;
+      if (fromNowClean > durationMinutes) {
+        termino = true;
+      } else {
+        enCurso = true;
+      }
+    } else if (fromNow[0] === 'segundos') enCurso = true;
+  }
+
+  return { termino, enCurso, hora };
+};
 
 const AsignaturaDelDia = () => {
   const [loading, setLoading] = useState(true);
@@ -72,37 +121,65 @@ const AsignaturaDelDia = () => {
       {loading && <ActivityIndicator />}
       {!loading &&
         asignaturas.map(({ id, nombre, aula, sede, horaC, horaT }) => {
-          const duration = moment
-            .duration(moment(`${horaC}00`, 'HHmmss').diff(moment(`${horaT}00`, 'HHmmss')))
-            .humanize();
-          const falta = moment(moment(`${horaC}00`, 'HHmmss')).fromNow();
-          // eslint-disable-next-line no-unused-vars
-          const [_, tiempo, escala] = /(\d\d|\d) (\w+)/g.exec(falta);
-          // eslint-disable-next-line no-unused-vars
-          const [__, tiempoDur, escalaDur] = /(\d\d|\d) (\w+)/g.exec(duration);
-
-          const termino = escala === escalaDur && tiempo >= tiempoDur;
-
-          // TODO: En curso
-
-          return (
-            <View key={id} style={[styles.card, { opacity: termino ? 0.4 : 1 }]}>
-              <Text style={styles.mainText}>{nombre}</Text>
-              <Row style={styles.row}>
-                <Text style={styles.subText}>{`Aula ${aula} - ${sede}`}</Text>
-              </Row>
-              <Row>
-                {termino ? (
-                  <Text style={styles.timeAgo}>La clase ya termino</Text>
-                ) : (
-                  <Text style={styles.timeAgo}>
-                    <Icon name="md-time" style={styles.iconTime} />
-                    <Text>{`  ${falta}`}</Text>
-                  </Text>
-                )}
-              </Row>
-            </View>
-          );
+          try {
+            const { termino, enCurso, hora } = getEstadoDeMateria(horaC, horaT);
+            return (
+              <View key={id} style={[styles.card, { opacity: termino ? 0.4 : 1 }]}>
+                <Text style={styles.mainText}>{nombre}</Text>
+                <Row style={styles.row}>
+                  <Text style={styles.subText}>{`Aula ${aula} - ${sede}`}</Text>
+                </Row>
+                <Row>
+                  {termino ? (
+                    <Text style={styles.timeAgo}>La clase ya termino</Text>
+                  ) : enCurso ? (
+                    <>
+                      <Icon
+                        name="timelapse"
+                        type={'MaterialIcons'}
+                        style={[styles.icon, styles.enCurso]}
+                      />
+                      <Text style={[styles.timeAgo, styles.enCurso]}>{'  en curso'}</Text>
+                    </>
+                  ) : (
+                    <>
+                      <Icon
+                        name="access-time"
+                        type={'MaterialIcons'}
+                        style={styles.icon}
+                      />
+                      <Text style={styles.timeAgo}>
+                        {'  '}
+                        <TimeAgo time={hora} />
+                      </Text>
+                    </>
+                  )}
+                </Row>
+              </View>
+            );
+          } catch (error) {
+            return (
+              <View
+                key={id}
+                style={[
+                  styles.card,
+                  {
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                  },
+                ]}
+              >
+                <Icon
+                  name="error"
+                  type={'MaterialIcons'}
+                  style={[styles.icon, { marginHorizontal: 5 }]}
+                />
+                <Text
+                  style={styles.error}
+                >{`Error cargando la asignatura ${nombre}`}</Text>
+              </View>
+            );
+          }
         })}
     </View>
   );

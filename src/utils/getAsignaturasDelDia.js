@@ -13,8 +13,8 @@ const getAsignaturasDelDia = async () => {
       nombre: 'Física 2',
       aula: '505',
       sede: 'Medrano',
-      horaC: '2000',
-      horaT: '2300',
+      horaC: '0300',
+      horaT: '0330',
     },
   ];
   await new Promise(resolve => setTimeout(resolve, 1000));
