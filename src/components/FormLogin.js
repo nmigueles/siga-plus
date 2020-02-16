@@ -72,6 +72,7 @@ function FormLogin({ handleLogin }) {
           secondInput.focus();
         }}
         blurOnSubmit={false}
+        autoCapitalize={'none'}
       />
 
       <TextInput

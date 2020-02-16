@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, StatusBar, AsyncStorage } from 'react-native';
 
-import Logo from '../components/Logo';
+import AppLogo from '../components/AppLogo';
 import Colors from '../constants/colors';
 import FormLogin from '../components/FormLogin';
 
@@ -11,11 +11,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.grey,
   },
-  formContainer: { flex: 1, marginBottom: 175 },
+  formContainer: {
+    marginTop: -40,
+    marginBottom: 220,
+  },
   logoContainer: {
-    marginTop: StatusBar.currentHeight,
-    marginBottom: 20,
     flex: 1,
+    minHeight: 200,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -48,7 +50,9 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.Main}>
-      <Logo scale={15} style={styles.logoContainer} />
+      <View style={styles.logoContainer}>
+        <AppLogo size={70} />
+      </View>
       <View style={styles.formContainer}>
         <FormLogin handleLogin={handleLogin} />
       </View>

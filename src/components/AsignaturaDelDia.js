@@ -46,10 +46,14 @@ const styles = StyleSheet.create({
 });
 
 const getEstadoDeMateria = (horaC, horaT) => {
+  const horaCClean = horaC.replace(':', '');
+  const horaTClean = horaT.replace(':', '');
   const durationString = moment
-    .duration(moment(`${horaC}00`, 'HHmmss').diff(moment(`${horaT}00`, 'HHmmss')))
+    .duration(
+      moment(`${horaCClean}00`, 'HHmmss').diff(moment(`${horaTClean}00`, 'HHmmss'))
+    )
     .humanize();
-  const hora = moment(`${horaC}00`, 'HHmmss');
+  const hora = moment(`${horaCClean}00`, 'HHmmss');
   const fromNowString = moment(hora).fromNow();
   const duration = /(\d\d|\d) (\w+)/g.exec(durationString).reverse();
   const fromNow = /(\w+) (\d\d|\d|\w+) (\w+)/g.exec(fromNowString).reverse();
@@ -60,24 +64,39 @@ const getEstadoDeMateria = (horaC, horaT) => {
   if (fromNow[2] === 'hace') {
     const fromNowClean =
       fromNow[1] === 'una' || fromNow[1] === 'un' ? 1 : Number(fromNow[1]);
+    const durationClean =
+      duration[1] === 'una' || duration[1] === 'un' ? 1 : Number(duration[1]);
 
     if (fromNow[0] === duration[0]) {
       // Estan en la misma escala
-      if (fromNowClean > Number(duration[1])) {
+      if (fromNowClean > durationClean) {
         termino = true;
       } else {
         enCurso = true;
       }
     }
     // No estan en la misma escala
-    if (fromNow[0] === 'minutos' && duration[0] === 'horas') {
-      const durationMinutes = Number(duration[1]) * 60;
+    if (
+      ['hora', 'horas'].includes(duration[0]) &&
+      ['minuto', 'minutos'].includes(fromNow[0])
+    ) {
+      const durationMinutes = durationClean * 60;
       if (fromNowClean > durationMinutes) {
         termino = true;
       } else {
         enCurso = true;
       }
-    } else if (fromNow[0] === 'segundos') enCurso = true;
+    } else if (
+      ['hora', 'horas'].includes(fromNow[0]) &&
+      ['minuto', 'minutos'].includes(duration[0])
+    ) {
+      const fromNowMinutes = fromNowClean * 60;
+      if (fromNowMinutes > durationClean) {
+        termino = true;
+      } else {
+        enCurso = true;
+      }
+    } else if (fromNow[0] === 'segundos' || fromNow[0] === 'segundo') enCurso = true;
   }
 
   return { termino, enCurso, hora };
@@ -88,11 +107,18 @@ const AsignaturaDelDia = () => {
   const [asignaturas, setAsignaturas] = useState([]);
 
   useEffect(() => {
-    async function anyNameFunction() {
+    async function preload() {
       setAsignaturas(await getAsignaturasDelDia());
       setLoading(false);
     }
-    anyNameFunction();
+    preload();
+
+    const interval = setInterval(async () => {
+      await preload();
+    }, 30000);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   moment.locale('es-us');
@@ -111,14 +137,29 @@ const AsignaturaDelDia = () => {
           try {
             const { termino, enCurso, hora } = getEstadoDeMateria(horaC, horaT);
             return (
-              <View key={id} style={[Styles.card, { opacity: termino ? 0.4 : 1 }]}>
-                <Text style={styles.mainText}>{nombre}</Text>
+              <View key={id} style={[Styles.card]}>
+                <Text
+                  style={[
+                    styles.mainText,
+                    { color: termino ? Colors.strongGrey : Colors.main },
+                  ]}
+                >
+                  {nombre}
+                </Text>
                 <Row style={styles.row}>
-                  <Text style={styles.subText}>{`Aula ${aula} - ${sede}`}</Text>
+                  <Text
+                    style={[
+                      styles.subText,
+                      { color: termino ? Colors.strongGrey : Colors.main },
+                    ]}
+                  >{`Aula ${aula} - ${sede}`}</Text>
                 </Row>
                 <Row>
                   {termino ? (
-                    <Text style={styles.timeAgo}>La clase ya termino</Text>
+                    <>
+                      <Icon name="update" type={'MaterialIcons'} style={[Styles.icon]} />
+                      <Text style={styles.timeAgo}> La clase ya terminó</Text>
+                    </>
                   ) : enCurso ? (
                     <>
                       <Icon
@@ -126,7 +167,7 @@ const AsignaturaDelDia = () => {
                         type={'MaterialIcons'}
                         style={[Styles.icon, styles.enCurso]}
                       />
-                      <Text style={[styles.timeAgo, styles.enCurso]}>{'  en curso'}</Text>
+                      <Text style={[styles.timeAgo, styles.enCurso]}>{' en curso'}</Text>
                     </>
                   ) : (
                     <>
@@ -136,7 +177,7 @@ const AsignaturaDelDia = () => {
                         style={Styles.icon}
                       />
                       <Text style={styles.timeAgo}>
-                        {'  '}
+                        {' '}
                         <TimeAgo time={hora} />
                       </Text>
                     </>
