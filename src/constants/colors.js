@@ -10,6 +10,8 @@ const Colors = {
   success: '#4BB543',
   info: '#66cccc',
   alert: '#ffcc00',
+  teal: '#ABBDB9',
+  green: '#A3DDBD',
   errorBar: '#FF0033',
   successBar: '#22bb33',
   infoBar: '#5bc0de',

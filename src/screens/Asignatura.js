@@ -1,8 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { HeaderBackButton } from 'react-navigation-stack';
 import { Icon } from 'native-base';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 import { WeekDays } from '../utils/getOrderedWeek';
 
@@ -10,6 +11,7 @@ import Colors from '../constants/colors';
 import Styles from '../constants/styles';
 
 import Card from '../components/Card';
+import ColorPicker from '../components/ColorPicker';
 
 const styles = StyleSheet.create({
   header: {
@@ -65,7 +67,16 @@ const styles = StyleSheet.create({
 
 const AsignaturaScreen = ({ navigation }) => {
   const { asignatura } = navigation.state.params;
+  const refRBSheet = useRef();
+  const [color, setColor] = useState(asignatura.color);
+  useEffect(() => {
+    // handle change of color.
+    console.log(color);
+  }, [color]);
 
+  const saveColor = () => {
+    asignatura.color = color;
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -73,6 +84,22 @@ const AsignaturaScreen = ({ navigation }) => {
         <Text style={styles.subTitle}>{`${asignatura.id} - ${asignatura.curso}`}</Text>
       </View>
       <View style={styles.body}>
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            marginLeft: 20,
+            backgroundColor: color,
+            width: 35,
+            height: 35,
+            borderRadius: 17.5,
+            borderColor: `${color}33`,
+            borderWidth: 2,
+            zIndex: 5,
+            top: 5,
+            right: 25,
+          }}
+          onPress={() => refRBSheet.current.open()}
+        />
         <Text
           style={styles.text}
         >{`${asignatura.sede}  -  Aula: ${asignatura.aula}`}</Text>
@@ -83,6 +110,7 @@ const AsignaturaScreen = ({ navigation }) => {
           } (${asignatura.turno}) ${asignatura.hora}hs a ${asignatura.horaT}hs `}</Text>
         </View>
       </View>
+
       {asignatura.estado !== 'Cursando' && (
         <View
           style={[
@@ -98,8 +126,33 @@ const AsignaturaScreen = ({ navigation }) => {
           <Text style={styles.badgeText}>{asignatura.estado}</Text>
         </View>
       )}
+
       <Text style={styles.textSeparator}>Resultado de Parciales</Text>
       <Card message={'No hay notas registradas al día de la fecha.'} />
+      <RBSheet
+        ref={refRBSheet}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
+        onClose={saveColor}
+        customStyles={{
+          wrapper: {
+            backgroundColor: 'transparent',
+          },
+          container: {
+            backgroundColor: Colors.white2,
+            borderTopEndRadius: 25,
+            borderTopStartRadius: 25,
+            shadowColor: Colors.main,
+            shadowOffset: 2,
+            elevation: 50,
+          },
+          draggableIcon: {
+            backgroundColor: Colors.strongGrey,
+          },
+        }}
+      >
+        <ColorPicker asignatura={asignatura} setColor={setColor} />
+      </RBSheet>
     </View>
   );
 };
