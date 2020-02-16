@@ -24,11 +24,10 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   badge: {
-    position: 'absolute',
-    top: 25,
-    right: 20,
     padding: 10,
+    marginLeft: 20,
     borderRadius: 5,
+    maxWidth: 100,
     zIndex: 10,
   },
   badgeText: {
@@ -36,11 +35,13 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontSize: 10,
     fontWeight: 'bold',
+    width: '100%',
+    textAlign: 'center',
     letterSpacing: 0.5,
   },
   title: {
     paddingBottom: 0,
-    fontSize: 22,
+    fontSize: 25,
   },
   subTitle: {
     fontSize: 15,
@@ -67,21 +68,6 @@ const AsignaturaScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {asignatura.estado !== 'Cursando' && (
-        <View
-          style={[
-            styles.badge,
-            {
-              backgroundColor:
-                asignatura.estado === 'Promovido' || asignatura.estado === 'Aprobado'
-                  ? Colors.success
-                  : Colors.info,
-            },
-          ]}
-        >
-          <Text style={styles.badgeText}>{asignatura.estado}</Text>
-        </View>
-      )}
       <View style={styles.header}>
         <Text style={styles.title}>{asignatura.nombre}</Text>
         <Text style={styles.subTitle}>{`${asignatura.id} - ${asignatura.curso}`}</Text>
@@ -97,6 +83,21 @@ const AsignaturaScreen = ({ navigation }) => {
           } (${asignatura.turno}) ${asignatura.hora}hs a ${asignatura.horaT}hs `}</Text>
         </View>
       </View>
+      {asignatura.estado !== 'Cursando' && (
+        <View
+          style={[
+            styles.badge,
+            {
+              backgroundColor:
+                asignatura.estado === 'Promovido' || asignatura.estado === 'Aprobado'
+                  ? Colors.success
+                  : Colors.info,
+            },
+          ]}
+        >
+          <Text style={styles.badgeText}>{asignatura.estado}</Text>
+        </View>
+      )}
       <Text style={styles.textSeparator}>Resultado de Parciales</Text>
       <Card message={'No hay notas registradas al día de la fecha.'} />
     </View>

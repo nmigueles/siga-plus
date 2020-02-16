@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     color: Colors.success,
   },
   mainText: {
-    fontSize: 25,
+    fontSize: 20,
   },
   subText: {
     fontSize: 15,

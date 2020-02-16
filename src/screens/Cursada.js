@@ -1,27 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import Colors from '../constants/colors';
 import asignaturas from '../constants/asignaturas';
 
 import Horario from '../components/Horario';
-import MessageBox from '../components/MessageBox';
 import Asignatura from '../components/Asignatura';
+import TextSeparator from '../components/TextSeparator';
+import MessageBox from '../components/MessageBox';
 
 const style = StyleSheet.create({
-  text: {
-    color: Colors.strongGrey,
-    paddingLeft: 20,
-    marginBottom: 10,
-    marginTop: 20,
-    textTransform: 'uppercase',
-    fontSize: 12,
-  },
   cursadaContainer: {
     flex: 1,
-    marginTop: 20,
     marginBottom: 40,
   },
 });
@@ -35,13 +26,13 @@ const CursadaScreen = ({ navigation }) => (
       type={'info'}
     />
     <View style={style.cursadaContainer}>
-      <Text style={style.text}>Cursada actual</Text>
+      <TextSeparator title="Cursada actual" />
+
       {asignaturas.map(asignatura => (
         <Asignatura key={asignatura.id} asignatura={asignatura} navigation={navigation} />
       ))}
-      <Text style={style.text}>Semana</Text>
+      <TextSeparator title="Semana" />
       <Horario asignaturas={asignaturas} />
-      {/* <Horarios asignaturas={asignaturas} /> */}
     </View>
   </ScrollView>
 );

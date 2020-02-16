@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 
 import moment from 'moment';
 import 'moment/locale/es-us';
@@ -10,6 +10,7 @@ import Colors from '../constants/colors';
 
 import Card from './Card';
 import CardAsignatura from './CardAsignatura';
+import TextSeparator from './TextSeparator';
 
 const styles = StyleSheet.create({
   container: {
@@ -116,7 +117,7 @@ const AsignaturaDelDia = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Hoy</Text>
+      <TextSeparator title="Hoy" />
 
       {loading && <ActivityIndicator />}
 

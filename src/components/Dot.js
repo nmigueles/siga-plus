@@ -1,35 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 
-import Colors from '../constants/colors';
-
-const styles = StyleSheet.create({
-  dot: {
-    marginHorizontal: 0.7,
-  },
-});
-
-const Dot = ({ extraStyle = {}, state = true, color = '#fff', size = 10 }) => (
+const Dot = ({ style, color = '#fff', size = 10 }) => (
   <View
     style={[
-      styles.dot,
       {
+        marginHorizontal: 0.7,
         width: size,
         height: size,
         borderRadius: size / 2,
       },
-      state ? { backgroundColor: color } : { backgroundColor: Colors.grey2 },
-      extraStyle,
+      { backgroundColor: color },
+      style,
     ]}
   />
 );
 
 Dot.propTypes = {
   color: PropTypes.string,
-  extraStyle: PropTypes.object,
+  style: PropTypes.any,
   size: PropTypes.number,
-  state: PropTypes.bool,
 };
 
 export default Dot;
