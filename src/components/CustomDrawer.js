@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     marginRight: 20,
-    marginBottom: 7,
+    marginBottom: 10,
   },
   userName: {
     fontSize: 17,

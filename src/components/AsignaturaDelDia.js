@@ -1,34 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
-import { Row, Icon } from 'native-base';
 
 import moment from 'moment';
 import 'moment/locale/es-us';
-import TimeAgo from 'react-native-timeago';
-
-import Colors from '../constants/colors';
-import Styles from '../constants/styles';
-import Card from './Card';
 
 import getAsignaturasDelDia from '../utils/getAsignaturasDelDia';
+
+import Colors from '../constants/colors';
+
+import Card from './Card';
+import CardAsignatura from './CardAsignatura';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginBottom: 15,
-  },
-  enCurso: {
-    color: Colors.success,
-  },
-  mainText: {
-    fontSize: 25,
-  },
-  subText: {
-    fontSize: 15,
-  },
-  row: {
-    marginTop: 3,
-    marginBottom: 10,
   },
   text: {
     color: Colors.strongGrey,
@@ -38,26 +24,22 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontSize: 12,
   },
-  timeAgo: {
-    flex: 1,
-    color: Colors.strongGrey,
-    paddingBottom: 5,
-  },
 });
 
-const getEstadoDeMateria = (horaC, horaT) => {
+const getEstadoDeAsignatura = (horaC, horaT) => {
   const horaCClean = horaC.replace(':', '');
   const horaTClean = horaT.replace(':', '');
+  const hora = moment(`${horaCClean}00`, 'HHmmss');
   const durationString = moment
     .duration(
       moment(`${horaCClean}00`, 'HHmmss').diff(moment(`${horaTClean}00`, 'HHmmss'))
     )
     .humanize();
-  const hora = moment(`${horaCClean}00`, 'HHmmss');
   const fromNowString = moment(hora).fromNow();
   const duration = /(\d\d|\d) (\w+)/g.exec(durationString).reverse();
   const fromNow = /(\w+) (\d\d|\d|\w+) (\w+)/g.exec(fromNowString).reverse();
 
+  let state;
   let termino = false;
   let enCurso = false;
 
@@ -71,8 +53,10 @@ const getEstadoDeMateria = (horaC, horaT) => {
       // Estan en la misma escala
       if (fromNowClean > durationClean) {
         termino = true;
+        state = 'termino';
       } else {
         enCurso = true;
+        state = 'enCurso';
       }
     }
     // No estan en la misma escala
@@ -83,8 +67,10 @@ const getEstadoDeMateria = (horaC, horaT) => {
       const durationMinutes = durationClean * 60;
       if (fromNowClean > durationMinutes) {
         termino = true;
+        state = 'termino';
       } else {
         enCurso = true;
+        state = 'enCurso';
       }
     } else if (
       ['hora', 'horas'].includes(fromNow[0]) &&
@@ -93,13 +79,18 @@ const getEstadoDeMateria = (horaC, horaT) => {
       const fromNowMinutes = fromNowClean * 60;
       if (fromNowMinutes > durationClean) {
         termino = true;
+        state = 'termino';
       } else {
         enCurso = true;
+        state = 'enCurso';
       }
-    } else if (fromNow[0] === 'segundos' || fromNow[0] === 'segundo') enCurso = true;
+    } else if (fromNow[0] === 'segundos' || fromNow[0] === 'segundo') {
+      enCurso = true;
+      state = 'enCurso';
+    }
   }
 
-  return { termino, enCurso, hora };
+  return { state, termino, enCurso, hora };
 };
 
 const AsignaturaDelDia = () => {
@@ -133,61 +124,27 @@ const AsignaturaDelDia = () => {
         <Card message={'No hay ninguna asignatura hoy.'} icon="terrain" />
       )}
       {!loading &&
-        asignaturas.map(({ id, nombre, aula, sede, hora: horaC, horaT }) => {
+        asignaturas.map(asignatura => {
           try {
-            const { termino, enCurso, hora } = getEstadoDeMateria(horaC, horaT);
+            const { state, hora } = getEstadoDeAsignatura(
+              asignatura.hora,
+              asignatura.horaT
+            );
             return (
-              <View key={id} style={[Styles.card]}>
-                <Text
-                  style={[
-                    styles.mainText,
-                    { color: termino ? Colors.strongGrey : Colors.main },
-                  ]}
-                >
-                  {nombre}
-                </Text>
-                <Row style={styles.row}>
-                  <Text
-                    style={[
-                      styles.subText,
-                      { color: termino ? Colors.strongGrey : Colors.main },
-                    ]}
-                  >{`Aula ${aula} - ${sede}`}</Text>
-                </Row>
-                <Row>
-                  {termino ? (
-                    <>
-                      <Icon name="update" type={'MaterialIcons'} style={[Styles.icon]} />
-                      <Text style={styles.timeAgo}> La clase ya terminó</Text>
-                    </>
-                  ) : enCurso ? (
-                    <>
-                      <Icon
-                        name="timelapse"
-                        type={'MaterialIcons'}
-                        style={[Styles.icon, styles.enCurso]}
-                      />
-                      <Text style={[styles.timeAgo, styles.enCurso]}>{' en curso'}</Text>
-                    </>
-                  ) : (
-                    <>
-                      <Icon
-                        name="access-time"
-                        type={'MaterialIcons'}
-                        style={Styles.icon}
-                      />
-                      <Text style={styles.timeAgo}>
-                        {' '}
-                        <TimeAgo time={hora} />
-                      </Text>
-                    </>
-                  )}
-                </Row>
-              </View>
+              <CardAsignatura
+                key={asignatura.id}
+                asignatura={asignatura}
+                hora={hora}
+                state={state}
+              />
             );
           } catch (error) {
             return (
-              <Card id={id} message={'Error cargando la asignatura'} nombre={nombre} />
+              <Card
+                id={asignatura.id}
+                message={'Error cargando la asignatura.'}
+                nombre={asignatura.nombre}
+              />
             );
           }
         })}
