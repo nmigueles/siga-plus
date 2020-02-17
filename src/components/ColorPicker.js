@@ -21,9 +21,6 @@ const ColorPicker = ({ setColor }) => (
     <Text
       style={{
         fontSize: 20,
-        borderBottomColor: Colors.grey2,
-        borderBottomWidth: 1,
-        marginBottom: 10,
         marginTop: 20,
         paddingBottom: 10,
         marginHorizontal: 20,
@@ -34,9 +31,9 @@ const ColorPicker = ({ setColor }) => (
     <View
       style={{
         flexDirection: 'row',
-        padding: 20,
+        marginHorizontal: 18.5,
         flexWrap: 'wrap',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
       }}
     >
@@ -45,12 +42,12 @@ const ColorPicker = ({ setColor }) => (
           <View
             style={{
               backgroundColor: col,
-              height: 50,
-              width: 50,
-              borderRadius: 25,
+              height: 45,
+              width: 45,
+              borderRadius: 22.5,
               alignSelf: 'baseline',
               marginVertical: 5,
-              marginRight: 5,
+              marginHorizontal: 2.5,
             }}
           ></View>
         </TouchableOpacity>

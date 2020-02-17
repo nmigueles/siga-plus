@@ -6,9 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/colors';
 
 const styles = StyleSheet.create({
-  done: {
-    backgroundColor: Colors.success,
-  },
   button: {
     display: 'flex',
     height: 45,
@@ -32,16 +29,19 @@ const CustomButton = ({
   onPress,
   done = false,
   loading = false,
+  doneIcon = 'md-checkmark',
+  doneBgColor = Colors.success,
+  activityIndicatorColor = Colors.white2,
 }) => (
   <TouchableOpacity
     disabled={loading || done}
     onPress={onPress}
-    style={[styles.button, style, done ? styles.done : null]}
+    style={[styles.button, style, done ? { backgroundColor: doneBgColor } : null]}
   >
     {loading ? (
-      <ActivityIndicator size="small" color={Colors.white2} />
+      <ActivityIndicator size="small" color={activityIndicatorColor} />
     ) : done ? (
-      <Ionicons name="md-checkmark" color="white" size={20} />
+      <Ionicons name={doneIcon} color="white" size={20} />
     ) : (
       <Text style={[styles.text, textStyle]}>{title}</Text>
     )}
@@ -54,7 +54,10 @@ CustomButton.propTypes = {
   textStyle: PropTypes.object,
   loading: PropTypes.bool,
   done: PropTypes.bool,
+  doneIcon: PropTypes.string,
+  doneBgColor: PropTypes.string,
   onPress: PropTypes.func.isRequired,
+  activityIndicatorColor: PropTypes.string,
 };
 
 export default CustomButton;

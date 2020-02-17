@@ -18,6 +18,7 @@ const Colors = {
   alertBar: '#f0ad4e',
   bar: 'rgba(8,8,8,0.3)',
   strongGrey: '#989898',
+  superGrey: '#666666',
 };
 
 export default Colors;

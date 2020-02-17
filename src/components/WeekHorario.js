@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Icon, Row } from 'native-base';
 
 import { Week, WeekDays, WeekFuture } from '../utils/getOrderedWeek';
@@ -22,7 +21,8 @@ const styles = StyleSheet.create({
     width: cardWidth,
     marginLeft: 20,
     padding: 10,
-    paddingLeft: 20,
+
+    paddingHorizontal: 20,
     backgroundColor: Colors.white2,
     shadowColor: Colors.black,
     shadowOpacity: 0.2,
@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
   },
   diaText: {
     fontSize: 25,
+    color: Colors.main,
+    marginBottom: 10,
   },
   dot: {
     position: 'absolute',
@@ -51,30 +53,17 @@ const styles = StyleSheet.create({
     fontSize: 15,
     padding: 2.75,
     paddingLeft: 1,
-  },
-  linearGradient: {
-    height: '100%',
-    position: 'absolute',
-    width: cardWidth * 0.4,
-    top: 0,
-    right: 0,
-    zIndex: 10,
+    color: Colors.main,
   },
 });
 
 // eslint-disable-next-line no-unused-vars
-const Horarios = ({ asignaturas }) => (
+const WeekHorario = ({ asignaturas }) => (
   <View>
-    <LinearGradient
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 0 }}
-      colors={['#ffffff00', Colors.white2]}
-      style={styles.linearGradient}
-    />
     <ScrollView
       horizontal={true}
-      snapToInterval={cardWidth}
-      snapToAlignment={'start'}
+      snapToInterval={cardWidth + 20}
+      snapToAlignment={'center'}
       showsHorizontalScrollIndicator={false}
       style={styles.container}
     >
@@ -83,27 +72,28 @@ const Horarios = ({ asignaturas }) => (
         if (AsignaturasDelDia.length) {
           return (
             <View style={styles.card} key={Math.random()}>
-              {AsignaturasDelDia.map((a, i) => (
-                <Dot
-                  key={a.id}
-                  color={a.color}
-                  size={12}
-                  style={[styles.dot, { right: 20 + 20 * i }]}
-                />
-              ))}
+              {[...AsignaturasDelDia].reverse().map((a, i, arr) => {
+                const limitator = Math.floor((arr.length + 1) / 3);
+                const normalizator = limitator > 1 ? limitator * 0.7 : limitator;
+                const separation = (20 * i) / (normalizator || 1);
+                return (
+                  <Dot
+                    key={a.id}
+                    color={a.color}
+                    size={12}
+                    style={[styles.dot, { right: 20 + separation }]}
+                  />
+                );
+              })}
               <Text style={styles.diaText}>
                 {index > 1 ? WeekDays[AsignaturasDelDia[0].dia] : WeekFuture[index]}
               </Text>
               {AsignaturasDelDia.length === 1 && (
                 <>
                   <Dot color={AsignaturasDelDia[0].color} size={12} style={styles.dot} />
-                  <View
-                    style={{
-                      paddingVertical: 10,
-                    }}
-                  >
+                  <View>
                     <View>
-                      <Text>{AsignaturasDelDia[0].nombre}</Text>
+                      <Text numberOfLines={1}>{AsignaturasDelDia[0].nombre}</Text>
                     </View>
                     <Row>
                       <Icon name="md-time" style={styles.iconTime} />
@@ -112,23 +102,19 @@ const Horarios = ({ asignaturas }) => (
                   </View>
                 </>
               )}
-              {AsignaturasDelDia.length > 1 &&
-                AsignaturasDelDia.map((asignatura, i, array) => (
+              {// more than one course in this day
+              AsignaturasDelDia.length > 1 &&
+                AsignaturasDelDia.map((asignatura, i) => (
                   <View key={i}>
                     <Row
                       key={asignatura.id}
                       style={{
                         justifyContent: 'space-between',
-                        borderBottomWidth: i === array.length - 1 ? 0 : 1,
-                        borderBottomColor: Colors.grey2,
                         alignItems: 'center',
-                        paddingTop: 5,
-                        paddingBottom: 10,
-                        marginTop: 5,
                       }}
                     >
                       <View style={{ maxWidth: '70%' }}>
-                        <Text>{asignatura.nombre}</Text>
+                        <Text numberOfLines={1}>{asignatura.nombre}</Text>
                       </View>
                       <View style={{ flexDirection: 'row' }}>
                         <Icon name="md-time" style={styles.iconTime} />
@@ -148,8 +134,8 @@ const Horarios = ({ asignaturas }) => (
   </View>
 );
 
-Horarios.propTypes = {
+WeekHorario.propTypes = {
   asignaturas: PropTypes.array.isRequired,
 };
 
-export default Horarios;
+export default WeekHorario;

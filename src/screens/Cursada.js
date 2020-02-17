@@ -5,10 +5,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import asignaturas from '../constants/asignaturas';
 
-import Horario from '../components/Horario';
+import WeekHorario from '../components/WeekHorario';
 import Asignatura from '../components/Asignatura';
 import TextSeparator from '../components/TextSeparator';
-import MessageBox from '../components/MessageBox';
 
 const style = StyleSheet.create({
   cursadaContainer: {
@@ -19,12 +18,6 @@ const style = StyleSheet.create({
 
 const CursadaScreen = ({ navigation }) => (
   <ScrollView>
-    <MessageBox
-      message={
-        'Les informamos que entre los días 18 de Febrero a las 16 hs. y el 5 de Marzo a las 16 hs se desarrollará la Preinscripción a materias del Ciclo lectivo de 2020.'
-      }
-      type={'info'}
-    />
     <View style={style.cursadaContainer}>
       <TextSeparator title="Cursada actual" />
 
@@ -32,7 +25,7 @@ const CursadaScreen = ({ navigation }) => (
         <Asignatura key={asignatura.id} asignatura={asignatura} navigation={navigation} />
       ))}
       <TextSeparator title="Semana" />
-      <Horario asignaturas={asignaturas} />
+      <WeekHorario asignaturas={asignaturas} />
     </View>
   </ScrollView>
 );

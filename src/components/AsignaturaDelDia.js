@@ -31,13 +31,15 @@ const getEstadoDeAsignatura = (horaC, horaT) => {
   const horaCClean = horaC.replace(':', '');
   const horaTClean = horaT.replace(':', '');
   const hora = moment(`${horaCClean}00`, 'HHmmss');
+
   const durationString = moment
     .duration(
       moment(`${horaCClean}00`, 'HHmmss').diff(moment(`${horaTClean}00`, 'HHmmss'))
     )
     .humanize();
+  console.log(horaCClean, horaTClean, hora, durationString);
   const fromNowString = moment(hora).fromNow();
-  const duration = /(\d\d|\d) (\w+)/g.exec(durationString).reverse();
+  const duration = /(\d\d|\d|\w+) (\w+)/g.exec(durationString).reverse();
   const fromNow = /(\w+) (\d\d|\d|\w+) (\w+)/g.exec(fromNowString).reverse();
 
   let state;
@@ -140,9 +142,11 @@ const AsignaturaDelDia = () => {
               />
             );
           } catch (error) {
+            // eslint-disable-next-line no-console
+            console.log('Error cargando materia del dia: ', error);
             return (
               <Card
-                id={asignatura.id}
+                key={asignatura.id}
                 message={'Error cargando la asignatura.'}
                 nombre={asignatura.nombre}
               />

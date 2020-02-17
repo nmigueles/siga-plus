@@ -5,9 +5,8 @@ import { Icon } from 'native-base';
 
 import Styles from '../constants/styles';
 
-const Card = ({ id = 0, nombre = '', message = '', icon = 'error' }) => (
+const Card = ({ nombre = '', message = '', icon = 'error' }) => (
   <View
-    key={id}
     style={[
       Styles.card,
       {

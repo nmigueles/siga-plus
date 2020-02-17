@@ -35,8 +35,12 @@ const CardAsignatura = ({ asignatura, hora, state }) => {
       case 'termino':
         return (
           <>
-            <Icon name="update" type={'MaterialIcons'} style={[Styles.icon]} />
-            <Text style={styles.timeAgo}> La clase ya terminó</Text>
+            <Icon
+              name="update"
+              type={'MaterialIcons'}
+              style={[Styles.icon, { marginTop: -7 }]}
+            />
+            <Text style={[styles.timeAgo, { marginTop: -10 }]}> La clase ya terminó</Text>
           </>
         );
       case 'enCurso':
@@ -69,16 +73,14 @@ const CardAsignatura = ({ asignatura, hora, state }) => {
           styles.mainText,
           { color: state === 'termino' ? Colors.strongGrey : Colors.main },
         ]}
+        numberOfLines={1}
       >
         {nombre}
       </Text>
       <Row style={styles.row}>
-        <Text
-          style={[
-            styles.subText,
-            { color: state === 'termino' ? Colors.strongGrey : Colors.main },
-          ]}
-        >{`Aula ${aula} - ${sede}`}</Text>
+        {state !== 'termino' && (
+          <Text style={styles.subText}>{`Aula ${aula} - ${sede}`}</Text>
+        )}
       </Row>
       <Row>{switchState(state)}</Row>
     </View>
