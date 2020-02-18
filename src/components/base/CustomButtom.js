@@ -3,7 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Colors from '../constants/colors';
+
+import Colors from '../../constants/colors';
 
 const styles = StyleSheet.create({
   button: {

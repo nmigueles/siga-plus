@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View } from 'react-native';
+import PropTypes from 'prop-types';
 
 const Dot = ({ style, color = '#fff', size = 10 }) => (
   <View

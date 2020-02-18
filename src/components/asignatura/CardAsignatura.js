@@ -4,8 +4,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Icon, Row } from 'native-base';
 import TimeAgo from 'react-native-timeago';
 
-import Colors from '../constants/colors';
-import Styles from '../constants/styles';
+import Colors from '../../constants/colors';
+import Styles from '../../constants/styles';
 
 const styles = StyleSheet.create({
   enCurso: {

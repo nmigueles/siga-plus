@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
-import Colors from '../constants/colors';
-import Ingresar from './CustomButtom';
-import MessageBox from './MessageBox';
+import Colors from '../../constants/colors';
+import Ingresar from '../base/CustomButtom';
+import MessageBox from '../base/MessageBox';
 
 const styles = StyleSheet.create({
   container: {

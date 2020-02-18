@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import Colors from '../constants/colors';
+import PropTypes from 'prop-types';
+
+import Colors from '../../constants/colors';
 
 const colors = [
   '#957DAD',

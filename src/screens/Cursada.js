@@ -5,9 +5,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import asignaturas from '../constants/asignaturas';
 
-import WeekHorario from '../components/WeekHorario';
-import Asignatura from '../components/Asignatura';
-import TextSeparator from '../components/TextSeparator';
+import TextSeparator from '../components/base/TextSeparator';
+import WeekHorario from '../components/asignatura/WeekHorario';
+import Asignatura from '../components/asignatura/Asignatura';
 
 const style = StyleSheet.create({
   cursadaContainer: {

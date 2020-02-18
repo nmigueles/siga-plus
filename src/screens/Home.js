@@ -4,9 +4,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import Colors from '../constants/colors';
 
-import MessageBox from '../components/MessageBox';
-import AsignaturaDelDia from '../components/AsignaturaDelDia';
-import AppLogo from '../components/AppLogo';
+import AppLogo from '../components/base/AppLogo';
+import MessageBox from '../components/base/MessageBox';
+import AsignaturaDelDia from '../components/asignatura/AsignaturaDelDia';
 
 const HomeScreen = () => {
   StatusBar.setBackgroundColor(Colors.white);

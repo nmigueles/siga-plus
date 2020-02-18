@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Image, StyleSheet } from 'react-native';
 
-const logo = require('../img/utn.png');
+const logo = require('../../img/utn.png');
 
 const styles = StyleSheet.create({
   logo: {

@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, StatusBar, AsyncStorage } from 'react-native';
 
-import AppLogo from '../components/AppLogo';
 import Colors from '../constants/colors';
-import FormLogin from '../components/FormLogin';
+
+import AppLogo from '../components/base/AppLogo';
+import FormLogin from '../components/login/FormLogin';
 
 const styles = StyleSheet.create({
   Main: {

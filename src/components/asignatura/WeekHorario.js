@@ -4,11 +4,11 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Icon, Row } from 'native-base';
 
-import { Week, WeekDays, WeekFuture } from '../utils/getOrderedWeek';
+import { Week, WeekDays, WeekFuture } from '../../utils/getOrderedWeek';
 
-import Dot from './Dot';
+import Dot from '../base/Dot';
 
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
 
 const { width } = Dimensions.get('screen');
 const cardWidth = width * 0.6;

@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Icon } from 'native-base';
 
-import Styles from '../constants/styles';
+import Styles from '../../constants/styles';
 
 const Card = ({ nombre = '', message = '', icon = 'error' }) => (
   <View

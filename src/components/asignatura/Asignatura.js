@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Colors from '../constants/colors';
+
+import Colors from '../../constants/colors';
 
 const height = 60;
 const dotSize = 15;

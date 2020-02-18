@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, AsyncStorage } from 'react-native';
 import PropTypes from 'prop-types';
 
-import CustomButton from './CustomButtom';
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
+
+import CustomButton from '../base/CustomButtom';
 
 const styles = StyleSheet.create({
   logout: {

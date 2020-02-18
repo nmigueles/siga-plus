@@ -1,16 +1,16 @@
 import React from 'react';
+import { Icon } from 'native-base';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator, TransitionPresets } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
-import { Icon } from 'native-base';
 
 import HomeScreen from './src/screens/Home';
 import LoginScreen from './src/screens/Login';
 import CursadaScreen from './src/screens/Cursada';
-import AuthLoadingScreen from './src/screens/AuthLoading';
 import AsignaturaScreen from './src/screens/Asignatura';
+import AuthLoadingScreen from './src/screens/AuthLoading';
 
-import CustomDrawer from './src/components/CustomDrawer';
+import CustomDrawer from './src/components/base/CustomDrawer';
 
 const defaultNavigationOptions = ({ navigation }) => ({
   headerTitleAlign: 'center',

@@ -4,13 +4,14 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/es-us';
 
-import getAsignaturasDelDia from '../utils/getAsignaturasDelDia';
+import getAsignaturasDelDia from '../../utils/getAsignaturasDelDia';
 
-import Colors from '../constants/colors';
+import Colors from '../../constants/colors';
 
-import Card from './Card';
+import Card from '../base/Card';
+import TextSeparator from '../base/TextSeparator';
+
 import CardAsignatura from './CardAsignatura';
-import TextSeparator from './TextSeparator';
 
 const styles = StyleSheet.create({
   container: {

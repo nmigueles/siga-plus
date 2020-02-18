@@ -9,9 +9,9 @@ import { WeekDays } from '../utils/getOrderedWeek';
 
 import Colors from '../constants/colors';
 
-import Card from '../components/Card';
-import ColorPicker from '../components/ColorPicker';
-import TextSeparator from '../components/TextSeparator';
+import Card from '../components/base/Card';
+import TextSeparator from '../components/base/TextSeparator';
+import ColorPicker from '../components/asignatura/ColorPicker';
 
 const styles = StyleSheet.create({
   header: {
