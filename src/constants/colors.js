@@ -12,6 +12,7 @@ const Colors = {
   alert: '#ffcc00',
   teal: '#ABBDB9',
   green: '#A3DDBD',
+  green2: '#53a678',
   errorBar: '#FF0033',
   successBar: '#22bb33',
   infoBar: '#5bc0de',
@@ -19,6 +20,10 @@ const Colors = {
   bar: 'rgba(8,8,8,0.3)',
   strongGrey: '#989898',
   superGrey: '#666666',
+  violeta: '#957DAD',
+  rosado: '#D291BC',
+  lila: '#E0BBE4',
+  rosa: '#FEC8D8',
 };
 
 export default Colors;

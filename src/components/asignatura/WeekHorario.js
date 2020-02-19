@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Icon, Row } from 'native-base';
+import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 
 import { Week, WeekDays, WeekFuture } from '../../utils/getOrderedWeek';
-
-import Dot from '../base/Dot';
 
 import Colors from '../../constants/colors';
 
@@ -72,25 +70,11 @@ const WeekHorario = ({ asignaturas }) => (
         if (AsignaturasDelDia.length) {
           return (
             <View style={styles.card} key={Math.random()}>
-              {[...AsignaturasDelDia].reverse().map((a, i, arr) => {
-                const limitator = Math.floor((arr.length + 1) / 3);
-                const normalizator = limitator > 1 ? limitator * 0.7 : limitator;
-                const separation = (20 * i) / (normalizator || 1);
-                return (
-                  <Dot
-                    key={a.id}
-                    color={a.color}
-                    size={12}
-                    style={[styles.dot, { right: 20 + separation }]}
-                  />
-                );
-              })}
               <Text style={styles.diaText}>
                 {index > 1 ? WeekDays[AsignaturasDelDia[0].dia] : WeekFuture[index]}
               </Text>
               {AsignaturasDelDia.length === 1 && (
                 <>
-                  <Dot color={AsignaturasDelDia[0].color} size={12} style={styles.dot} />
                   <View>
                     <View>
                       <Text numberOfLines={1}>{AsignaturasDelDia[0].nombre}</Text>
@@ -102,8 +86,7 @@ const WeekHorario = ({ asignaturas }) => (
                   </View>
                 </>
               )}
-              {// more than one course in this day
-              AsignaturasDelDia.length > 1 &&
+              {AsignaturasDelDia.length > 1 &&
                 AsignaturasDelDia.map((asignatura, i) => (
                   <View key={i}>
                     <Row

@@ -38,7 +38,6 @@ const getEstadoDeAsignatura = (horaC, horaT) => {
       moment(`${horaCClean}00`, 'HHmmss').diff(moment(`${horaTClean}00`, 'HHmmss'))
     )
     .humanize();
-  console.log(horaCClean, horaTClean, hora, durationString);
   const fromNowString = moment(hora).fromNow();
   const duration = /(\d\d|\d|\w+) (\w+)/g.exec(durationString).reverse();
   const fromNow = /(\w+) (\d\d|\d|\w+) (\w+)/g.exec(fromNowString).reverse();

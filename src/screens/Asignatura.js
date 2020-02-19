@@ -79,26 +79,66 @@ const styles = StyleSheet.create({
     top: 4,
   },
 });
+const RBSheetStyles = {
+  wrapper: {
+    backgroundColor: 'transparent',
+  },
+  container: {
+    backgroundColor: Colors.white2,
+    borderTopEndRadius: 25,
+    borderTopStartRadius: 25,
+    shadowColor: Colors.main,
+    shadowOffset: 2,
+    elevation: 50,
+  },
+  draggableIcon: {
+    backgroundColor: Colors.strongGrey,
+  },
+};
 
 const AsignaturaScreen = ({ navigation }) => {
   const { asignatura } = navigation.state.params;
   const refRBSheet = useRef();
+  const firstUpdate = useRef(0);
   const [color, setColor] = useState(asignatura.color);
+
+  const handleColorChange = newColor => {
+    // Se ejecuta cuando cambia el color en el ColorPicker;
+    // console.log(`Guardando el color ${newColor} para ${asignatura.nombre}`);
+    setColor(newColor);
+    navigation.setParams({
+      newColor: {
+        id: asignatura.id,
+        color,
+      },
+    });
+  };
 
   useEffect(() => {
     const getColor = async () => {
       const storedColor = await ColorService.getColor(asignatura.id);
       if (storedColor !== null) setColor(storedColor);
+      else firstUpdate.current = 1;
     };
     getColor();
   }, []);
 
   useEffect(() => {
+    // Do not run on first change.
+    if (firstUpdate.current <= 1) {
+      firstUpdate.current += 1;
+      return;
+    }
     const saveColor = async () => {
       await ColorService.saveColor(asignatura.id, color);
     };
     saveColor();
   }, [color]);
+
+  const colorEstado =
+    asignatura.estado === 'Promovido' || asignatura.estado === 'Aprobado'
+      ? Colors.green2
+      : Colors.info;
 
   return (
     <View style={styles.container}>
@@ -129,10 +169,7 @@ const AsignaturaScreen = ({ navigation }) => {
           style={[
             styles.badge,
             {
-              backgroundColor:
-                asignatura.estado === 'Promovido' || asignatura.estado === 'Aprobado'
-                  ? Colors.success
-                  : Colors.info,
+              backgroundColor: colorEstado,
             },
           ]}
         >
@@ -145,24 +182,9 @@ const AsignaturaScreen = ({ navigation }) => {
         ref={refRBSheet}
         closeOnDragDown={true}
         closeOnPressMask={true}
-        customStyles={{
-          wrapper: {
-            backgroundColor: 'transparent',
-          },
-          container: {
-            backgroundColor: Colors.white2,
-            borderTopEndRadius: 25,
-            borderTopStartRadius: 25,
-            shadowColor: Colors.main,
-            shadowOffset: 2,
-            elevation: 50,
-          },
-          draggableIcon: {
-            backgroundColor: Colors.strongGrey,
-          },
-        }}
+        customStyles={RBSheetStyles}
       >
-        <ColorPicker asignatura={asignatura} setColor={setColor} />
+        <ColorPicker asignatura={asignatura} onColorClick={handleColorChange} />
       </RBSheet>
     </View>
   );

@@ -17,7 +17,7 @@ const style = StyleSheet.create({
 });
 
 const getAsignaturas = async () => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 300));
   return asignaturasList;
 };
 

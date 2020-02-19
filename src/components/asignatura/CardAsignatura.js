@@ -9,7 +9,7 @@ import Styles from '../../constants/styles';
 
 const styles = StyleSheet.create({
   enCurso: {
-    color: Colors.success,
+    color: Colors.green2,
   },
   mainText: {
     fontSize: 20,
