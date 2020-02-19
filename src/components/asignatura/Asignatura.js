@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Colors from '../../constants/colors';
+import ColorService from '../../services/colorService';
 
 const height = 60;
 const dotSize = 15;
@@ -31,21 +32,34 @@ const styles = StyleSheet.create({
   },
 });
 
-const Asignatura = ({ navigation, asignatura }) => (
-  <TouchableOpacity
-    style={styles.container}
-    onPress={() => {
-      navigation.navigate('Asignatura', { asignatura });
-    }}
-  >
-    <Text style={styles.nameText}>{asignatura.nombre}</Text>
-    <View style={[styles.dot, { backgroundColor: asignatura.color }]} />
-  </TouchableOpacity>
-);
+const getColor = async (id, setColor) => {
+  const storedColor = await ColorService.getColor(id);
+  if (storedColor !== null) setColor(storedColor);
+};
+
+const Asignatura = ({ navigation, asignatura, reload }) => {
+  const [color, setColor] = useState(asignatura.color);
+  useEffect(() => {
+    getColor(asignatura.id, setColor);
+  }, [reload]);
+
+  return (
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        navigation.navigate('Asignatura', { asignatura });
+      }}
+    >
+      <Text style={styles.nameText}>{asignatura.nombre}</Text>
+      <View style={[styles.dot, { backgroundColor: color }]} />
+    </TouchableOpacity>
+  );
+};
 
 Asignatura.propTypes = {
   navigation: PropTypes.any,
   asignatura: PropTypes.object.isRequired,
+  reload: PropTypes.any,
 };
 
 Asignatura.displayName = 'Asignatura';

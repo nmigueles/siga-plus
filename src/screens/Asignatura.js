@@ -12,6 +12,7 @@ import Colors from '../constants/colors';
 import Card from '../components/base/Card';
 import TextSeparator from '../components/base/TextSeparator';
 import ColorPicker from '../components/asignatura/ColorPicker';
+import ColorService from '../services/colorService';
 
 const styles = StyleSheet.create({
   header: {
@@ -83,14 +84,22 @@ const AsignaturaScreen = ({ navigation }) => {
   const { asignatura } = navigation.state.params;
   const refRBSheet = useRef();
   const [color, setColor] = useState(asignatura.color);
+
   useEffect(() => {
-    // handle change of color.
-    if (color !== asignatura.color) console.log(color);
+    const getColor = async () => {
+      const storedColor = await ColorService.getColor(asignatura.id);
+      if (storedColor !== null) setColor(storedColor);
+    };
+    getColor();
+  }, []);
+
+  useEffect(() => {
+    const saveColor = async () => {
+      await ColorService.saveColor(asignatura.id, color);
+    };
+    saveColor();
   }, [color]);
 
-  const saveColor = () => {
-    asignatura.color = color;
-  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -136,7 +145,6 @@ const AsignaturaScreen = ({ navigation }) => {
         ref={refRBSheet}
         closeOnDragDown={true}
         closeOnPressMask={true}
-        onClose={saveColor}
         customStyles={{
           wrapper: {
             backgroundColor: 'transparent',

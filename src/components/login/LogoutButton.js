@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 });
 
 const logout = async () => {
-  await AsyncStorage.clear();
+  await AsyncStorage.removeItem('userToken');
   await new Promise(resolve => setTimeout(resolve, 800));
 };
 
