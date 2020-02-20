@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, StatusBar, AsyncStorage } from 'react-native';
+import { StyleSheet, View, StatusBar } from 'react-native';
 
 import Colors from '../constants/colors';
 
 import AppLogo from '../components/base/AppLogo';
 import FormLogin from '../components/login/FormLogin';
+import AuthService from '../services/authService';
 
 const styles = StyleSheet.create({
   Main: {
@@ -27,8 +28,8 @@ const styles = StyleSheet.create({
 const LoginScreen = ({ navigation }) => {
   StatusBar.setBackgroundColor(Colors.grey);
 
-  const signIn = async () => {
-    await AsyncStorage.setItem('userToken', 'test');
+  const saveAndRedirect = async token => {
+    await AuthService.setUserToken(token);
     navigation.navigate('App');
   };
 
@@ -39,14 +40,22 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    // Simulate api loading response.
-    setTimeout(() => {
-      setLoading(false);
-      setDone(true);
-      setTimeout(() => {
-        signIn();
-      }, 800);
-    }, 2000);
+    const { success, token, message } = await AuthService.login(user, pass);
+    setLoading(false);
+
+    if (success) {
+      // logear usuario
+      if (token) {
+        setDone(true);
+        setTimeout(() => {
+          saveAndRedirect(token);
+        }, 800);
+      } else {
+        setErrorMessage('Error obteniendo el token.');
+      }
+    } else if (message) {
+      setErrorMessage(message);
+    }
   };
 
   return (

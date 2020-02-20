@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react';
+import { Alert } from 'react-native';
 import PropTypes from 'prop-types';
-import { AsyncStorage } from 'react-native';
 import { AppLoading } from 'expo';
+
+import AuthService from '../services/authService';
 
 function AuthLoadingScreen({ navigation }) {
   // Fetch the token from storage then navigate to our appropriate place
   const isLogged = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-    navigation.navigate(userToken ? 'App' : 'Login');
+    const { valid, reason } = await AuthService.checkIfLogged();
+    if (!valid && reason) Alert(reason);
+    navigation.navigate(valid ? 'App' : 'Login');
   };
 
   useEffect(() => {
