@@ -40,10 +40,10 @@ class AuthService {
           'Content-Type': 'application/json',
         },
       });
-
+      if (!response.ok) return { valid: false };
       const { valid, reason, error } = await response.json();
-      if (error || !valid) return { valid, reason: 'error' };
-      if (reason && !valid) return { valid, reason };
+      if (error || !valid) return { valid: false, reason: error.message || error };
+      if (reason && !valid) return { valid: false, reason };
       if (valid) return { valid };
       return { valid: false };
     } catch (error) {
@@ -52,14 +52,19 @@ class AuthService {
     }
   }
 
-  static async checkIfLogged() {
+  static async userValidLogin() {
     try {
       const token = await AsyncStorage.getItem('userToken');
       if (!token) return false;
+
       const { valid, reason } = await this.verifyToken(token);
-      return { valid, reason };
+      if (reason) console.log(reason);
+      if (!valid) await AsyncStorage.removeItem('userToken');
+
+      return valid;
     } catch (error) {
-      return { valid: false };
+      await AsyncStorage.removeItem('userToken');
+      return false;
     }
   }
 }
