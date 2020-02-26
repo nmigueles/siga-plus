@@ -90,7 +90,7 @@ const WeekHorario = ({ asignaturas }) => (
                 AsignaturasDelDia.map((asignatura, i) => (
                   <View key={i}>
                     <Row
-                      key={asignatura.id}
+                      key={asignatura._id}
                       style={{
                         justifyContent: 'space-between',
                         alignItems: 'center',

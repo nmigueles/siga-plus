@@ -135,7 +135,7 @@ const AsignaturaDelDia = () => {
             );
             return (
               <CardAsignatura
-                key={asignatura.id}
+                key={asignatura._id}
                 asignatura={asignatura}
                 hora={hora}
                 state={state}
@@ -146,7 +146,7 @@ const AsignaturaDelDia = () => {
             console.log('Error cargando materia del dia: ', error);
             return (
               <Card
-                key={asignatura.id}
+                key={asignatura._id}
                 message={'Error cargando la asignatura.'}
                 nombre={asignatura.nombre}
               />

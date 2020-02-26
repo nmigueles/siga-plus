@@ -129,7 +129,6 @@ const AsignaturaScreen = ({ navigation }) => {
       return;
     }
     const saveColor = async () => {
-      console.log('Saving color');
       await ColorService.saveColor(asignatura._id, color);
     };
     saveColor();
