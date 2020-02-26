@@ -40,7 +40,7 @@ const getColor = async (id, setColor) => {
 const Asignatura = ({ navigation, asignatura, reload }) => {
   const [color, setColor] = useState(asignatura.color);
   useEffect(() => {
-    getColor(asignatura.id, setColor);
+    getColor(asignatura._id, setColor);
   }, [reload]);
 
   return (

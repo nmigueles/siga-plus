@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Colors from '../../constants/colors';
 
 import CustomButton from '../base/CustomButtom';
+import AuthService from '../../services/authService';
 
 const styles = StyleSheet.create({
   logout: {
@@ -22,8 +23,7 @@ const styles = StyleSheet.create({
 });
 
 const logout = async () => {
-  await AsyncStorage.removeItem('userToken');
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await AuthService.logout();
 };
 
 const LogoutButton = ({ navigation }) => {

@@ -98,17 +98,16 @@ const RBSheetStyles = {
 
 const AsignaturaScreen = ({ navigation }) => {
   const { asignatura } = navigation.state.params;
-  const refRBSheet = useRef();
-  const firstUpdate = useRef(0);
   const [color, setColor] = useState(asignatura.color);
+  const firstUpdate = useRef(0);
+  const refRBSheet = useRef();
 
   const handleColorChange = newColor => {
     // Se ejecuta cuando cambia el color en el ColorPicker;
-    // console.log(`Guardando el color ${newColor} para ${asignatura.nombre}`);
     setColor(newColor);
     navigation.setParams({
       newColor: {
-        id: asignatura.id,
+        id: asignatura._id,
         color,
       },
     });
@@ -116,9 +115,9 @@ const AsignaturaScreen = ({ navigation }) => {
 
   useEffect(() => {
     const getColor = async () => {
-      const storedColor = await ColorService.getColor(asignatura.id);
+      const storedColor = await ColorService.getColor(asignatura._id);
       if (storedColor !== null) setColor(storedColor);
-      else firstUpdate.current = 1;
+      else firstUpdate.current = 2;
     };
     getColor();
   }, []);
@@ -130,7 +129,8 @@ const AsignaturaScreen = ({ navigation }) => {
       return;
     }
     const saveColor = async () => {
-      await ColorService.saveColor(asignatura.id, color);
+      console.log('Saving color');
+      await ColorService.saveColor(asignatura._id, color);
     };
     saveColor();
   }, [color]);
@@ -149,7 +149,9 @@ const AsignaturaScreen = ({ navigation }) => {
             style={[styles.dot, { backgroundColor: color }]}
             onPress={() => refRBSheet.current.open()}
           />
-          <Text style={styles.subTitle}>{`${asignatura.id} - ${asignatura.curso}`}</Text>
+          <Text
+            style={styles.subTitle}
+          >{`${asignatura.courseId} - ${asignatura.curso}`}</Text>
         </View>
       </View>
       <View style={styles.body}>

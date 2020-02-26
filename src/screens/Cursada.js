@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import asignaturasList from '../constants/asignaturas';
-
+import Card from '../components/base/Card';
 import TextSeparator from '../components/base/TextSeparator';
 import WeekHorario from '../components/asignatura/WeekHorario';
 import Asignatura from '../components/asignatura/Asignatura';
+import CoursesService from '../services/coursesService';
 
 const style = StyleSheet.create({
   cursadaContainer: {
@@ -17,14 +17,23 @@ const style = StyleSheet.create({
 });
 
 const getAsignaturas = async () => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  return asignaturasList;
+  const courses = await CoursesService.getCourses();
+  return courses;
 };
 
 const CursadaScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [reload, Reload] = useState(1);
   const [asignaturas, setAsignaturas] = useState([]);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getAsignaturas().then(response => {
+      setAsignaturas(response);
+      setRefreshing(false);
+    });
+  }, [refreshing]);
 
   useEffect(() => {
     async function preload() {
@@ -42,22 +51,29 @@ const CursadaScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView>
-      {loading && <ActivityIndicator style={{ marginTop: 20 }} />}
+    <ScrollView
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
+      {loading && <ActivityIndicator style={{ marginTop: 40 }} />}
       {!loading && (
         <View style={style.cursadaContainer}>
           <TextSeparator title="Cursada actual" />
-
-          {asignaturas.map(asignatura => (
-            <Asignatura
-              reload={reload}
-              key={asignatura.id}
-              asignatura={asignatura}
-              navigation={navigation}
-            />
-          ))}
-          <TextSeparator title="Semana" />
-          <WeekHorario asignaturas={asignaturas} reload={reload} />
+          {asignaturas.length === 0 && <Card message="No hay cursos." />}
+          {asignaturas.length > 0 &&
+            asignaturas.map(asignatura => (
+              <Asignatura
+                key={asignatura._id}
+                asignatura={asignatura}
+                navigation={navigation}
+                reload={reload}
+              />
+            ))}
+          {asignaturas.length > 0 && (
+            <View>
+              <TextSeparator title="Semana" />
+              <WeekHorario asignaturas={asignaturas} />
+            </View>
+          )}
         </View>
       )}
     </ScrollView>

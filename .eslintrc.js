@@ -14,6 +14,7 @@ module.exports = {
     'operator-linebreak': 'off',
     'no-nested-ternary': 'off',
     'react/display-name': 'off',
+    'no-underscore-dangle': 'off',
   },
   globals: {
     fetch: true,

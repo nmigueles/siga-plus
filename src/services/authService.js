@@ -52,6 +52,10 @@ class AuthService {
     }
   }
 
+  static async getUserToken() {
+    return AsyncStorage.getItem('userToken');
+  }
+
   static async userValidLogin() {
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -65,6 +69,15 @@ class AuthService {
     } catch (error) {
       await AsyncStorage.removeItem('userToken');
       return false;
+    }
+  }
+
+  static async logout() {
+    try {
+      console.log('deslogeado');
+      await AsyncStorage.removeItem('userToken');
+    } catch (error) {
+      console.log(error);
     }
   }
 }
