@@ -17,6 +17,7 @@ class CoursesService {
           Authorization: `Bearer ${token}`,
         },
       });
+      if (!response.ok) return [];
       const asignaturas = await response.json();
       return asignaturas || [];
     } catch (error) {

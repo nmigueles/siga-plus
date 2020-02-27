@@ -13,7 +13,6 @@ class AuthService {
           'Content-Type': 'application/json',
         },
       });
-
       const { success, token, message } = await response.json();
       return { success, token, message };
     } catch (error) {
@@ -33,6 +32,7 @@ class AuthService {
   static async verifyToken(token) {
     const LOGIN_URI = `${API_BASE_URL}/auth/verify-user-token`;
     try {
+      if (!token) return { valid: false, reason: 'Invalid token' };
       const response = await fetch(LOGIN_URI, {
         method: 'POST',
         body: JSON.stringify({ token }),
@@ -53,7 +53,12 @@ class AuthService {
   }
 
   static async getUserToken() {
-    return AsyncStorage.getItem('userToken');
+    try {
+      return AsyncStorage.getItem('userToken');
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
   }
 
   static async userValidLogin() {

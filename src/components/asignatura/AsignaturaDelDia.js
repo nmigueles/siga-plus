@@ -51,8 +51,10 @@ const getEstadoDeAsignatura = (horaC, horaT) => {
       fromNow[1] === 'una' || fromNow[1] === 'un' ? 1 : Number(fromNow[1]);
     const durationClean =
       duration[1] === 'una' || duration[1] === 'un' ? 1 : Number(duration[1]);
-
-    if (fromNow[0] === duration[0]) {
+    if (
+      ['hora', 'horas'].includes(fromNow[0]) &&
+      ['hora', 'horas'].includes(duration[0])
+    ) {
       // Estan en la misma escala
       if (fromNowClean > durationClean) {
         termino = true;
@@ -93,7 +95,12 @@ const getEstadoDeAsignatura = (horaC, horaT) => {
     }
   }
 
-  return { state, termino, enCurso, hora };
+  return {
+    state,
+    termino,
+    enCurso,
+    hora: moment(`${horaTClean}00`, 'HHmmss'),
+  };
 };
 
 const AsignaturaDelDia = () => {
