@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { DrawerNavigatorItems } from 'react-navigation-drawer';
+
+import UserService from '../../services/userService';
 
 import Colors from '../../constants/colors';
 
@@ -42,27 +44,46 @@ const styles = StyleSheet.create({
   },
 });
 
-const CustomDrawer = props => (
-  <View style={styles.drawerContainer}>
-    <View style={styles.topDrawer}>
-      <View style={styles.logoContainer}>
-        <AppLogo size={35} container={{ height: 100 }} />
+const getUser = async () => {
+  const user = await UserService.getUser();
+  return user;
+};
+
+const CustomDrawer = props => {
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    getUser().then(response => {
+      setUser(response);
+      setLoading(false);
+    });
+  }, []);
+  return (
+    <View style={styles.drawerContainer}>
+      <View style={styles.topDrawer}>
+        <View style={styles.logoContainer}>
+          <AppLogo size={35} container={{ height: 100 }} />
+        </View>
+        {loading ? (
+          <ActivityIndicator color={Colors.strongGrey} style={{ width: 50 }} />
+        ) : (
+          <>
+            <Image style={styles.userImage} source={{ uri: user.img }} />
+            <Text style={styles.userName}>{user.name}</Text>
+            <Text style={styles.userCarrera}>{user.carrera}</Text>
+          </>
+        )}
       </View>
-      <Image
-        style={styles.userImage}
-        source={{ uri: 'https://avatars0.githubusercontent.com/u/35758739' }}
+      <DrawerNavigatorItems
+        {...props}
+        activeBackgroundColor={Colors.grey3}
+        activeTintColor={Colors.main}
       />
-      <Text style={styles.userName}>Nicolás Migueles</Text>
-      <Text style={styles.userCarrera}>Ingeniería en Sistemas de la Información</Text>
+      <LogoutButton navigation={props.navigation} />
     </View>
-    <DrawerNavigatorItems
-      {...props}
-      activeBackgroundColor={Colors.grey3}
-      activeTintColor={Colors.main}
-    />
-    <LogoutButton navigation={props.navigation} />
-  </View>
-);
+  );
+};
 
 CustomDrawer.propTypes = {
   navigation: PropTypes.any,

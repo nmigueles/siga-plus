@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-
 import { API_BASE_URL } from '../constants/backend';
+
 import AuthService from './authService';
 
 class CoursesService {
@@ -12,6 +12,7 @@ class CoursesService {
     try {
       const token = await AuthService.getUserToken();
       if (!token) throw new Error('Error gettin token');
+
       const response = await fetch(COURSES_URI, {
         headers: {
           Authorization: `Bearer ${token}`,

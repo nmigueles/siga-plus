@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import { Icon } from 'native-base';
 
 import Colors from '../../constants/colors';
 
@@ -42,23 +43,48 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 2.5,
   },
+  icon: {
+    position: 'absolute',
+    top: 13,
+    left: 10,
+    zIndex: 3,
+    color: Colors.white2,
+  },
 });
 
-const ColorPicker = ({ onColorClick }) => (
+const ColorPicker = ({ onColorClick, selected }) => (
   <View>
     <Text style={styles.MainText}>Seleccionar color</Text>
     <View style={styles.ColorsContainer}>
-      {colors.map(col => (
-        <TouchableOpacity key={col} onPress={() => onColorClick(col)}>
-          <View style={[styles.ColorDot, { backgroundColor: col }]}></View>
-        </TouchableOpacity>
-      ))}
+      {colors.map(col => {
+        const isSelected = selected === col;
+        return isSelected ? (
+          <TouchableOpacity key={col}>
+            <View
+              style={[
+                styles.ColorDot,
+                {
+                  backgroundColor: col,
+                  borderColor: `${col}90`,
+                  borderWidth: 3,
+                },
+              ]}
+            ></View>
+            <Icon name="check" type="MaterialIcons" style={styles.icon} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity key={col} onPress={() => onColorClick(col)}>
+            <View style={[styles.ColorDot, { backgroundColor: col }]}></View>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   </View>
 );
 
 ColorPicker.propTypes = {
   onColorClick: PropTypes.any,
+  selected: PropTypes.string,
 };
 
 export default ColorPicker;

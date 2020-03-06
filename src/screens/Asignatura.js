@@ -185,7 +185,11 @@ const AsignaturaScreen = ({ navigation }) => {
         closeOnPressMask={true}
         customStyles={RBSheetStyles}
       >
-        <ColorPicker asignatura={asignatura} onColorClick={handleColorChange} />
+        <ColorPicker
+          asignatura={asignatura}
+          onColorClick={handleColorChange}
+          selected={color}
+        />
       </RBSheet>
     </View>
   );
