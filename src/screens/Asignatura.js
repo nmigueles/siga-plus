@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Icon } from 'native-base';
 import PropTypes from 'prop-types';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -13,6 +13,7 @@ import Card from '../components/base/Card';
 import TextSeparator from '../components/base/TextSeparator';
 import ColorPicker from '../components/asignatura/ColorPicker';
 import ColorService from '../services/colorService';
+import Notas from '../components/asignatura/Notas';
 
 const styles = StyleSheet.create({
   header: {
@@ -99,6 +100,7 @@ const RBSheetStyles = {
 const AsignaturaScreen = ({ navigation }) => {
   const { asignatura } = navigation.state.params;
   const [color, setColor] = useState(asignatura.color);
+  const [showNotas, setShowNotas] = useState(true);
   const firstUpdate = useRef(0);
   const refRBSheet = useRef();
 
@@ -113,13 +115,26 @@ const AsignaturaScreen = ({ navigation }) => {
     });
   };
 
+  const toggleVisibility = async () => {
+    // Se ejecuta cuando cambia el color en el ColorPicker;
+    const newBoolean = !showNotas;
+    setShowNotas(newBoolean);
+    await AsyncStorage.setItem(`visibility-${asignatura._id}`, newBoolean ? '1' : '');
+  };
+
   useEffect(() => {
-    const getColor = async () => {
+    const load = async () => {
+      // get color
       const storedColor = await ColorService.getColor(asignatura._id);
       if (storedColor !== null) setColor(storedColor);
       else firstUpdate.current = 2;
+      // get visibility
+      const visibility = Boolean(
+        await AsyncStorage.getItem(`visibility-${asignatura._id}`)
+      );
+      setShowNotas(visibility);
     };
-    getColor();
+    load();
   }, []);
 
   useEffect(() => {
@@ -164,7 +179,6 @@ const AsignaturaScreen = ({ navigation }) => {
           }) ${asignatura.hora}hs a ${asignatura.horaT}hs `}</Text>
         </View>
       </View>
-
       {asignatura.estado !== 'Cursando' && (
         <View
           style={[
@@ -177,8 +191,32 @@ const AsignaturaScreen = ({ navigation }) => {
           <Text style={styles.badgeText}>{asignatura.estado}</Text>
         </View>
       )}
-      <TextSeparator title="Resultado de Parciales" />
-      <Card message={'No hay notas registradas al día de la fecha.'} />
+      <TextSeparator title="Resultado de Parciales">
+        {asignatura.notas.length > 0 && (
+          <TouchableOpacity
+            onPress={toggleVisibility}
+            style={{
+              position: 'absolute',
+              right: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ color: Colors.strongGrey, fontSize: 12, letterSpacing: 0.5 }}>
+              {showNotas ? 'HIDE' : 'SHOW'}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </TextSeparator>
+      {!(asignatura.notas.length > 0) ? (
+        <Card message={'No hay notas registradas al día de la fecha.'} />
+      ) : showNotas ? (
+        <Notas notas={asignatura.notas} />
+      ) : (
+        <Card message={'Notas ocultas.'} icon={'visibility-off'} />
+      )}
+
+      {/* Color picker */}
       <RBSheet
         ref={refRBSheet}
         closeOnDragDown={true}

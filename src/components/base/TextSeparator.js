@@ -7,7 +7,6 @@ import Colors from '../../constants/colors';
 const styles = StyleSheet.create({
   main: {
     color: Colors.strongGrey,
-
     textTransform: 'uppercase',
     fontSize: 12,
     letterSpacing: 0.5,
