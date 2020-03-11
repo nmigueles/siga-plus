@@ -66,7 +66,17 @@ const WeekHorario = ({ asignaturas }) => (
       style={styles.container}
     >
       {Week.map((weekDay, index) => {
-        const AsignaturasDelDia = asignaturas.filter(({ dia }) => dia === weekDay);
+        const AsignaturasDelDia = asignaturas
+          .filter(a => a.dia.includes(weekDay))
+          .map(a => {
+            const dayIndex = a.dia.indexOf(weekDay);
+            return {
+              ...a,
+              dia: a.dia[dayIndex],
+              hora: a.hora[dayIndex],
+              horaT: a.horaT[dayIndex],
+            };
+          });
         if (AsignaturasDelDia.length) {
           return (
             <View style={styles.card} key={Math.random()}>

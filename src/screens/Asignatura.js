@@ -154,6 +154,15 @@ const AsignaturaScreen = ({ navigation }) => {
       ? Colors.green2
       : Colors.info;
 
+  const getSchedule = a =>
+    // eslint-disable-next-line implicit-arrow-linebreak
+    a.dia
+      .map(
+        (day, i) =>
+          // eslint-disable-next-line implicit-arrow-linebreak
+          `${WeekDays[day]} (${asignatura.turno}) ${asignatura.hora[i]}hs a ${asignatura.horaT[i]}hs `
+      )
+      .join('y ');
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -174,9 +183,7 @@ const AsignaturaScreen = ({ navigation }) => {
         >{`${asignatura.sede}  -  Aula: ${asignatura.aula}`}</Text>
         <View style={styles.horario}>
           <Icon name="access-time" type={'MaterialIcons'} style={styles.timeIcon} />
-          <Text style={styles.bodySubtitle}>{`${WeekDays[asignatura.dia]} (${
-            asignatura.turno
-          }) ${asignatura.hora}hs a ${asignatura.horaT}hs `}</Text>
+          <Text style={styles.bodySubtitle}>{getSchedule(asignatura)}</Text>
         </View>
       </View>
       {asignatura.estado !== 'Cursando' && (

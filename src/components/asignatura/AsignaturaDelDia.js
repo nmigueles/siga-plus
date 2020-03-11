@@ -28,11 +28,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const getEstadoDeAsignatura = (horaC, horaT) => {
-  const horaCClean = horaC.replace(':', '');
-  const horaTClean = horaT.replace(':', '');
-  const hora = moment(`${horaCClean}00`, 'HHmmss');
+const cleanHour = hour => {
+  const hourPlain = hour.replace(':', '');
+  if ([...hourPlain].length === 3) return `0${hourPlain}`.replace(':', '');
+  return hourPlain;
+};
 
+const getEstadoDeAsignatura = (horaC, horaT) => {
+  const horaCClean = cleanHour(horaC);
+  const horaTClean = cleanHour(horaT);
+  const hora = moment(`${horaCClean}00`, 'HHmmss');
   const durationString = moment
     .duration(
       moment(`${horaCClean}00`, 'HHmmss').diff(moment(`${horaTClean}00`, 'HHmmss'))
@@ -137,8 +142,8 @@ const AsignaturaDelDia = () => {
         asignaturas.map(asignatura => {
           try {
             const { state, hora } = getEstadoDeAsignatura(
-              asignatura.hora,
-              asignatura.horaT
+              asignatura.hora[0],
+              asignatura.horaT[0]
             );
             return (
               <CardAsignatura

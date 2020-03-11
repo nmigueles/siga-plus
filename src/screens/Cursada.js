@@ -4,7 +4,7 @@ import { View, StyleSheet, ActivityIndicator, RefreshControl } from 'react-nativ
 import { ScrollView } from 'react-native-gesture-handler';
 
 import Card from '../components/base/Card';
-import LastUpdated from '../components/base/LastUpdated';
+// import LastUpdated from '../components/base/LastUpdated';
 import TextSeparator from '../components/base/TextSeparator';
 import WeekHorario from '../components/asignatura/WeekHorario';
 import Asignatura from '../components/asignatura/Asignatura';
@@ -58,9 +58,7 @@ const CursadaScreen = ({ navigation }) => {
       {loading && <ActivityIndicator style={{ marginTop: 40 }} />}
       {!loading && (
         <View style={style.cursadaContainer}>
-          <TextSeparator title="Cursada actual">
-            <LastUpdated />
-          </TextSeparator>
+          <TextSeparator title="Cursada actual">{/* <LastUpdated /> */}</TextSeparator>
           {asignaturas.length === 0 && <Card message="No hay cursos." />}
           {asignaturas.length > 0 &&
             asignaturas.map(asignatura => (
