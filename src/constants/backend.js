@@ -1,1 +1,2 @@
-export const API_BASE_URL = 'https://siga-plus.now.sh/api/v1';
+// eslint-disable-next-line import/prefer-default-export
+export const API_BASE_URL = 'https://siga-plus.herokuapp.com/api/v1';
