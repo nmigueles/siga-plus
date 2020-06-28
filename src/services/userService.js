@@ -4,14 +4,19 @@ import { API_BASE_URL } from '../constants/backend';
 import AuthService from './authService';
 
 class UserService {
+  user = undefined;
+
   /**
    * Devuelve el usuario logeado.
    */
   static async getUser() {
+    if (this.user) {
+      return this.user;
+    }
     const GET_ME_URI = `${API_BASE_URL}/user/me`;
     try {
       const token = await AuthService.getUserToken();
-      if (!token) throw new Error('Error gettin token');
+      if (!token) throw new Error('Error getting token');
 
       const response = await fetch(GET_ME_URI, {
         headers: {
@@ -20,6 +25,7 @@ class UserService {
       });
       if (!response.ok) return {};
       const user = await response.json();
+      this.user = user;
       return user;
     } catch (error) {
       console.error(error);
