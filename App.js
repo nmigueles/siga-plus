@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from 'native-base';
-import ErrorBoundary from 'react-native-error-boundary';
+
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator, TransitionPresets } from 'react-navigation-stack';
@@ -10,7 +10,6 @@ import LoginScreen from './src/screens/Login';
 import CursadaScreen from './src/screens/Cursada';
 import AsignaturaScreen from './src/screens/Asignatura';
 import AuthLoadingScreen from './src/screens/AuthLoading';
-import CustomFallback from './src/screens/CustomFallback';
 
 import CustomDrawer from './src/components/base/CustomDrawer';
 
@@ -72,10 +71,6 @@ const RootStack = createSwitchNavigator(
 
 const AppContainer = createAppContainer(RootStack);
 
-const App = () => (
-  <ErrorBoundary>
-    <AppContainer />
-  </ErrorBoundary>
-);
+const App = () => <AppContainer />;
 
 export default App;
