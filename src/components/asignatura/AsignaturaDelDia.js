@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 
-import moment from 'moment';
-import 'moment/locale/es-us';
-
 import getAsignaturasDelDia from '../../utils/getAsignaturasDelDia';
+import getEstadoDeAsignatura from '../../helpers/getEstadoDeAsignatura';
 
 import Colors from '../../constants/colors';
 
@@ -28,86 +26,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const cleanHour = hour => {
-  const hourPlain = hour.replace(':', '');
-  if ([...hourPlain].length === 3) return `0${hourPlain}`.replace(':', '');
-  return hourPlain;
-};
-
-const getEstadoDeAsignatura = (horaC, horaT) => {
-  const horaCClean = cleanHour(horaC);
-  const horaTClean = cleanHour(horaT);
-  const hora = moment(`${horaCClean}00`, 'HHmmss');
-  const durationString = moment
-    .duration(
-      moment(`${horaCClean}00`, 'HHmmss').diff(moment(`${horaTClean}00`, 'HHmmss'))
-    )
-    .humanize();
-  const fromNowString = moment(hora).fromNow();
-  const duration = /(\d\d|\d|\w+) (\w+)/g.exec(durationString).reverse();
-  const fromNow = /(\w+) (\d\d|\d|\w+) (\w+)/g.exec(fromNowString).reverse();
-
-  let state;
-  let termino = false;
-  let enCurso = false;
-
-  if (fromNow[2] === 'hace') {
-    const fromNowClean =
-      fromNow[1] === 'una' || fromNow[1] === 'un' ? 1 : Number(fromNow[1]);
-    const durationClean =
-      duration[1] === 'una' || duration[1] === 'un' ? 1 : Number(duration[1]);
-    if (
-      ['hora', 'horas'].includes(fromNow[0]) &&
-      ['hora', 'horas'].includes(duration[0])
-    ) {
-      // Estan en la misma escala
-      if (fromNowClean > durationClean) {
-        termino = true;
-        state = 'termino';
-      } else {
-        enCurso = true;
-        state = 'enCurso';
-      }
-    }
-    // No estan en la misma escala
-    if (
-      ['hora', 'horas'].includes(duration[0]) &&
-      ['minuto', 'minutos'].includes(fromNow[0])
-    ) {
-      const durationMinutes = durationClean * 60;
-      if (fromNowClean > durationMinutes) {
-        termino = true;
-        state = 'termino';
-      } else {
-        enCurso = true;
-        state = 'enCurso';
-      }
-    } else if (
-      ['hora', 'horas'].includes(fromNow[0]) &&
-      ['minuto', 'minutos'].includes(duration[0])
-    ) {
-      const fromNowMinutes = fromNowClean * 60;
-      if (fromNowMinutes > durationClean) {
-        termino = true;
-        state = 'termino';
-      } else {
-        enCurso = true;
-        state = 'enCurso';
-      }
-    } else if (fromNow[0] === 'segundos' || fromNow[0] === 'segundo') {
-      enCurso = true;
-      state = 'enCurso';
-    }
-  }
-
-  return {
-    state,
-    termino,
-    enCurso,
-    hora: moment(`${horaTClean}00`, 'HHmmss'),
-  };
-};
-
 const AsignaturaDelDia = () => {
   const [loading, setLoading] = useState(true);
   const [asignaturas, setAsignaturas] = useState([]);
@@ -127,8 +45,6 @@ const AsignaturaDelDia = () => {
     };
   }, []);
 
-  moment.locale('es-us');
-
   return (
     <View style={styles.container}>
       <TextSeparator title="Hoy" />
@@ -142,6 +58,7 @@ const AsignaturaDelDia = () => {
         asignaturas.map(asignatura => {
           try {
             const { state, hora } = getEstadoDeAsignatura(
+              new Date(),
               asignatura.hora[0],
               asignatura.horaT[0]
             );
@@ -149,6 +66,7 @@ const AsignaturaDelDia = () => {
               <CardAsignatura
                 key={asignatura._id}
                 asignatura={asignatura}
+                // TODO TESTEAR SI EL NUEVO FORMATO DE HORA FUNCIONA CON EL TIME AGO
                 hora={hora}
                 state={state}
               />
