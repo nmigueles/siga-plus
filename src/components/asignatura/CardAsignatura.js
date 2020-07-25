@@ -3,9 +3,14 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Icon, Row } from 'native-base';
 import TimeAgo from 'react-native-timeago';
+import moment from 'moment-timezone';
 
 import Colors from '../../constants/colors';
 import Styles from '../../constants/styles';
+
+import getProgressOfDates from '../../helpers/getProgressOfDates';
+
+import ProgressBar from './ProgressBar';
 
 const styles = StyleSheet.create({
   enCurso: {
@@ -24,12 +29,15 @@ const styles = StyleSheet.create({
   timeAgo: {
     flex: 1,
     color: Colors.strongGrey,
-    paddingBottom: 5,
+    paddingBottom: 7,
   },
 });
 
-const CardAsignatura = ({ asignatura, hora, state }) => {
-  const { nombre, aula, sede } = asignatura;
+const CardAsignatura = ({ asignatura, hora: horaObjetivo, state }) => {
+  const { nombre, aula, sede, hora, horaT } = asignatura;
+  const ahora = moment().format('HH:mm');
+  const progress = getProgressOfDates(ahora, hora[0], horaT[0]);
+
   const switchState = () => {
     switch (state) {
       case 'termino':
@@ -46,22 +54,45 @@ const CardAsignatura = ({ asignatura, hora, state }) => {
       case 'enCurso':
         return (
           <>
-            <Icon
-              name="timelapse"
-              type={'MaterialIcons'}
-              style={[Styles.icon, styles.enCurso]}
-            />
-            <Text style={[styles.timeAgo, styles.enCurso]}>{' en curso'}</Text>
+            <View style={{ width: '100%' }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  alignItems: 'flex-end',
+                }}
+              >
+                <Text style={[styles.timeAgo, styles.enCurso]}>{'Clase en curso'}</Text>
+                <Text
+                  style={[styles.timeAgo, { flex: 0, fontSize: 11, color: Colors.main }]}
+                >
+                  {horaObjetivo.slice(0, 5)} hs
+                </Text>
+              </View>
+              <ProgressBar {...{ progress }} />
+            </View>
+          </>
+        );
+      case 'noInicio':
+        return (
+          <>
+            <Icon name="access-time" type={'MaterialIcons'} style={Styles.icon} />
+            <Text style={styles.timeAgo}>
+              {' '}
+              <TimeAgo
+                time={moment(horaObjetivo, 'HH:mm:ss').tz(
+                  'America/Argentina/Buenos_Aires',
+                  true
+                )}
+              />
+            </Text>
           </>
         );
       default:
         return (
           <>
             <Icon name="access-time" type={'MaterialIcons'} style={Styles.icon} />
-            <Text style={styles.timeAgo}>
-              {' '}
-              <TimeAgo time={hora} />
-            </Text>
+            <Text style={styles.timeAgo}>Default state</Text>
           </>
         );
     }
