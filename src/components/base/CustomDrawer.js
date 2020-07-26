@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { DrawerNavigatorItems } from 'react-navigation-drawer';
 
 import UserService from '../../services/userService';
 
 import Colors from '../../constants/colors';
 
-import AppLogo from './AppLogo';
+import UserLoading from './UserLoading';
 import LogoutButton from '../login/LogoutButton';
+
+import wait from '../../utils/wait';
 
 const styles = StyleSheet.create({
   drawerContainer: {
@@ -36,12 +38,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.strongGrey,
   },
-  logoContainer: {
-    height: 50,
-    paddingBottom: 10,
-    justifyContent: 'flex-start',
-    marginBottom: 10,
-  },
 });
 
 const getUser = async () => {
@@ -56,17 +52,14 @@ const CustomDrawer = props => {
   useEffect(() => {
     getUser().then(response => {
       setUser(response);
-      setLoading(false);
+      wait(1000).then(() => setLoading(false));
     });
   }, []);
   return (
     <View style={styles.drawerContainer}>
       <View style={styles.topDrawer}>
-        <View style={styles.logoContainer}>
-          <AppLogo size={35} container={{ height: 100 }} />
-        </View>
         {loading ? (
-          <ActivityIndicator color={Colors.strongGrey} style={{ width: 50 }} />
+          <UserLoading />
         ) : (
           <>
             <Image style={styles.userImage} source={{ uri: user.img }} />
