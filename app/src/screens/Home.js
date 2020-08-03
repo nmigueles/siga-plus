@@ -7,7 +7,7 @@ import UserService from '../services/userService';
 
 import Colors from '../constants/colors';
 import AppLogo from '../components/base/AppLogo';
-import MessageBox from '../components/base/MessageBox';
+// import MessageBox from '../components/base/MessageBox';
 import AsignaturaDelDia from '../components/asignatura/AsignaturaDelDia';
 
 import registerForPushNotificationsAsync from '../utils/registerForPushNotificationsAsync';
@@ -32,10 +32,6 @@ const HomeScreen = () => {
 
   return (
     <ScrollView>
-      <MessageBox
-        message="La app ahora se auto publica gracias a nuestro CI/CP"
-        type="info"
-      />
       <AsignaturaDelDia />
     </ScrollView>
   );
