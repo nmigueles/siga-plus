@@ -1,0 +1,51 @@
+name: CI/CD Backend
+
+on:
+  pull_request:
+    paths:
+      - "server/**"
+  push:
+    paths:
+      - "server/**"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - name: Test runner
+        run: |
+          cd server
+          npm install
+          npm test --detectOpenHandles
+        env:
+          NODE_ENV: test
+          MONGO_URI: ${{secrets.MONG_DEV_URI}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/master' # Run only when push to master
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy on heroku
+        uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          heroku_app_name: "siga-plus"
+          appdir: "server"
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v1.2
+        with:
+          url: https://siga-plus.herokuapp.com/health
+          max-attempts: 3
+          retry-delay: 5s
+      - name: Send discord notification
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
+          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          message: SIGA+ Backend deployed via CI/CD.
