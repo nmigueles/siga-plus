@@ -12,6 +12,11 @@ class UserController {
 
       const user: User = await UserService.getUserById(id);
 
+      if (!user) {
+        res.status(404);
+        return next(new Error('User not found.'));
+      }
+
       return res.json(user);
     } catch (error) {
       return next(error);

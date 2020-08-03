@@ -14,7 +14,6 @@ if (isProduction) {
   console.log('Database » Trying to connect to production db.');
   URI = MONGO_URI_PROD;
 } else {
-  console.log('Database » Trying to connect to local db.');
   URI = MONGO_URI;
 }
 

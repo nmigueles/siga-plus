@@ -5,7 +5,7 @@ import 'dotenv/config';
 
 import './tasks/connectDb';
 
-import { isProduction } from './utils/enviroment';
+import { isDevelopment } from './utils/enviroment';
 
 import { notFoundHandler, errorHandler } from './middlewares';
 
@@ -16,9 +16,14 @@ import routesV1 from './routes/v1.routes';
 app.use(helmet());
 app.use(express.json());
 
-if (!isProduction) app.use(morgan('dev'));
+if (isDevelopment) app.use(morgan('dev'));
 
 app.use('/api/v1', routesV1);
+
+app.get('/health', (_, res) => {
+  res.sendStatus(200);
+});
+app.get('/', (_, res) => res.json({ name: 'sigaplus.api' }));
 
 app.use(notFoundHandler);
 app.use(errorHandler);

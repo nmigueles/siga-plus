@@ -9,7 +9,6 @@ const userRouter = Router();
 
 userRouter.get('/all', Privileges.userScope(seeUserScope), UserController.getAll);
 userRouter.get('/me', Privileges.requireLogin(), UserController.getMe);
-userRouter.get('/courses', Privileges.requireLogin(), UserController.getUserCourses);
 userRouter.get('/:id', Privileges.userScope(seeUserScope), UserController.getById);
 
 userRouter.post('/push-notifications', Privileges.requireLogin(), UserController.setExpoPushToken);
