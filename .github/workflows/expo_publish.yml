@@ -21,3 +21,9 @@ jobs:
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
       - run: cd app/ && npm install
       - run: expo publish --non-interactive app
+      - name: Send discord notification
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
+          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          message: SIGA+ mobile app published via CI/CD.
