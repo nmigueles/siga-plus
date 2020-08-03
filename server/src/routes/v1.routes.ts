@@ -9,7 +9,7 @@ const router = Router();
 router.use('/auth', authRouter);
 router.use('/course', coursesRouter);
 router.use('/user', userRouter);
-router.use('/', (_, res) =>
+router.get('/', (_, res) =>
   res.json({ name: 'siga.plus.api', version: process.env.npm_package_version })
 );
 
