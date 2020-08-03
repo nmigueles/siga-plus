@@ -4,7 +4,7 @@ import app from '../app';
 
 const request = supertest(app);
 
-describe('Basic API Functionality', () => {
+describe('Root API functionality', () => {
   it('GET /', async done => {
     const response = await request.get('/');
     expect(response.status).toBe(200);

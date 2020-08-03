@@ -17,6 +17,7 @@ jobs:
           node-version: "12"
       - name: Test runner
         run: |
+          cd server
           npm install
           npm test --detectOpenHandles
         env:
