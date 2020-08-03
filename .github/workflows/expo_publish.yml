@@ -20,4 +20,4 @@ jobs:
           expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
       - run: cd app/ && npm install
-      - run: expo publish app
+      - run: expo publish --non-interactive app
