@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - 'app/**'
+      - "app/**"
 jobs:
   publish:
     name: Install and publish
@@ -19,6 +19,5 @@ jobs:
           expo-version: 3.x
           expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
-      - run: cd app
-      - run: npm install
-      - run: expo publish
+      - run: cd app/ && npm install
+      - run: expo publish app
