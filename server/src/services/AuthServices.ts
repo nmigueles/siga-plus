@@ -99,7 +99,7 @@ class AuthService {
 
   static async register(user: User): Promise<AuthResponse> {
     if (await UserService.userExists(user.username)) {
-      return { success: false, message: 'User already exists' };
+      return { success: false, message: 'User already exists.' };
     }
     user.password = await AuthService.hashPassword(user.password);
     const resgisteredUser = await UserService.createUser(user);

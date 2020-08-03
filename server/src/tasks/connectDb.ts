@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { isProduction } from '../utils/enviroment';
+import { isProduction, isTest } from '../utils/enviroment';
 
 const { MONGO_URI, MONGO_URI_PROD } = process.env;
 const connectionOptions = {
@@ -8,7 +8,7 @@ const connectionOptions = {
   useFindAndModify: false,
 };
 
-let URI;
+let URI: string;
 
 if (isProduction) {
   console.log('Database » Trying to connect to production db.');
@@ -17,7 +17,16 @@ if (isProduction) {
   URI = MONGO_URI;
 }
 
-mongoose.connect(URI, connectionOptions).then(
-  () => console.log('Database » Connected.'),
-  error => console.log('Database » Error in connection.', error)
-);
+export async function connect() {
+  try {
+    await mongoose.connect(URI, connectionOptions);
+    if (!isTest) console.log('Database » Connected.');
+  } catch (error) {
+    console.error('Database » Error in connection.', error.message);
+    process.exit(0);
+  }
+}
+
+export async function disconnect() {
+  await mongoose.disconnect();
+}

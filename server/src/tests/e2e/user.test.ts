@@ -1,38 +1,21 @@
 import supertest from 'supertest';
 
-import app from '../app';
+import app from '../../app';
+
+import { disconnect, connect } from '../../tasks/connectDb';
 
 const request = supertest(app);
 
-describe('Root API functionality', () => {
-  it('GET /', async done => {
-    const response = await request.get('/');
-    expect(response.status).toBe(200);
-    done();
-  });
-  it('GET /notexistingroute', async done => {
-    const response = await request.get('/notexistingroute');
-    expect(response.status).toBe(404);
-    done();
-  });
-  it('GET /health - Should be able to get app health', async done => {
-    const response = await request.get('/health');
-    expect(response.status).toBe(200);
-    done();
-  });
+beforeAll(async done => {
+  await connect();
+  done();
 });
 
-describe('GET /api/v1/', () => {
-  it('Should respond with info about the API', async done => {
-    const response = await request.get('/api/v1/');
-    expect(response.status).toBe(200);
-    expect(response.body.name).toBeDefined();
-    expect(response.body.version).toBeDefined();
-    done();
-  });
+afterAll(async done => {
+  await disconnect();
+  done();
 });
 
-// USER ENDPOINTS
 describe('GET /user/all', () => {
   it('Should get unauthorized', async done => {
     const response = await request.get(`/api/v1/user/all`);
