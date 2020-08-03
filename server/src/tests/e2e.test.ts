@@ -1,7 +1,5 @@
 import supertest from 'supertest';
 
-// API E2E Testing
-
 import app from '../app';
 
 const request = supertest(app);
