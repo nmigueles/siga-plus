@@ -2,8 +2,10 @@
 
 Aplicación movil para ver tu cursada, notas y recibir notificaciónes desde tu celular.
 
+<p align="middle">
 <img  width="180" src="https://github.com/nicomigueles/siga-plus/blob/master/assets/home_screen.jpg">
 <img  width="180" src="https://github.com/nicomigueles/siga-plus/blob/master/assets/cursada_screen.jpg">
+</p>
 
 ## Server
 
