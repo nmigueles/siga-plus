@@ -1,0 +1,25 @@
+name: CI Test
+
+on:
+  pull_request:
+    paths:
+      - "server/**"
+  push:
+    paths:
+      - "server/**"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - name: Test runner
+        run: |
+          npm install
+          npm test --detectOpenHandles
+        env:
+          NODE_ENV: test
+          MONGO_URI: ${{secrets.MONG_DEV_URI}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
