@@ -7,6 +7,12 @@ class AuthController {
   static async doLogin(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password } = req.body;
+
+      if (!username || !password) {
+        res.status(400);
+        return next(new Error('Missing username or password field.'));
+      }
+
       const { success, message, token } = await AuthService.login(username, password);
 
       if (!success) {
@@ -29,7 +35,10 @@ class AuthController {
       };
       const { success, message, user } = await AuthService.register(newUser as User);
 
-      if (!success) return res.json({ success, message });
+      if (!success) {
+        res.status(409);
+        return res.json({ success, message });
+      }
       const userResponse = {
         id: user.id,
         name: user.name,
@@ -46,7 +55,10 @@ class AuthController {
     try {
       const { token } = req.body;
 
-      if (!token) return res.json({ valid: false });
+      if (!token) {
+        res.status(400);
+        return next(new Error('Missing user token in request.'));
+      }
 
       const valid = AuthService.verifyToken(token);
 
@@ -55,6 +67,10 @@ class AuthController {
       }
       return res.json({ valid: false });
     } catch (error) {
+      if ((error as Error).message === 'jwt malformed') {
+        res.status(422);
+        return res.json({ valid: false, reason: 'Malformed user token.' });
+      }
       return res.json({ valid: false, reason: error.message });
     }
   }

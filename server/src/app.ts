@@ -3,8 +3,6 @@ import helmet from 'helmet';
 import express from 'express';
 import 'dotenv/config';
 
-import './tasks/connectDb';
-
 import { isDevelopment } from './utils/enviroment';
 
 import { notFoundHandler, errorHandler } from './middlewares';
@@ -18,6 +16,7 @@ app.use(express.json());
 
 if (isDevelopment) app.use(morgan('dev'));
 
+// TODO Rate limit auth enpoints
 app.use('/api/v1', routesV1);
 
 app.get('/health', (_, res) => {
