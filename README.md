@@ -1,9 +1,11 @@
-# SIGA+
+# SIGA Plus
 
-Mobile app for running the siga-frba-tracker
+Aplicación movil para ver tus notas, recibir notificaciónes y mucho más.
 
-Will be able to:
-* See all subjects detected
-* Run the manual check
-* See the daily schedules
-* See all "trámites"
+## Server
+
+API
+
+## App
+
+React native cross-platform mobile app
