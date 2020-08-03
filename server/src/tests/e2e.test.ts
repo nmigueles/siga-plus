@@ -42,7 +42,7 @@ describe('GET /user/all', () => {
     done();
   });
 
-  it('Should get malformed token on not valid token', async done => {
+  it('Should get malformed token when not valid token was provided', async done => {
     const response = await request.get(`/api/v1/user/all`).set({ Authorization: 'notvalidtoken' });
     expect(response.status).toBe(400);
     expect(response.body.error).toBeDefined();
@@ -50,7 +50,7 @@ describe('GET /user/all', () => {
     done();
   });
 
-  it('Should get unauthorized without scope', async done => {
+  it('Should get unauthorized when user has no privileges to see other users', async done => {
     const auth = await request
       .post('/api/v1/auth/login')
       .send({ username: 'test', password: 'test' });
