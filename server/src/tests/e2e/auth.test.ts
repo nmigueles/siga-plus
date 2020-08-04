@@ -19,10 +19,24 @@ afterAll(async done => {
 });
 
 describe('POST /auth/login', () => {
-  it('Should expect username and passwords fields', async done => {
+  it('Should require username and passwords fields', async done => {
     const response = await request.post('/api/v1/auth/login');
     expect(response.status).toBe(400);
-    expect(response.body.error.message).toBe('Missing username or password field.');
+    expect(response.body.error.message).toBe('"username" is required. "password" is required');
+    done();
+  });
+
+  it('Should require username fields', async done => {
+    const response = await request.post('/api/v1/auth/login').send({ password: 'password' });
+    expect(response.status).toBe(400);
+    expect(response.body.error.message).toBe('"username" is required');
+    done();
+  });
+
+  it('Should require password fields', async done => {
+    const response = await request.post('/api/v1/auth/login').send({ username: 'username' });
+    expect(response.status).toBe(400);
+    expect(response.body.error.message).toBe('"password" is required');
     done();
   });
 
@@ -43,20 +57,9 @@ describe('POST /auth/login', () => {
     expect(response.body.token).toBeDefined();
     done();
   });
-
-  // TODO Implement login restrictions like password length, strength, etc.
 });
 
 describe('POST /auth/register', () => {
-  xit('Should expect required fields', async done => {
-    const response = await request.post('/api/v1/auth/register');
-    expect(response.status).toBe(400);
-    expect(response.body.error.message).toContain('name field is required.');
-    expect(response.body.error.message).toContain('username field is required.');
-    expect(response.body.error.message).toContain('password field is required.');
-    done();
-  });
-
   it('Should register a new user', async done => {
     const newUser = { name: 'register test', username: 'register', password: 'register' };
     const response = await request.post('/api/v1/auth/register').send(newUser);
@@ -75,7 +78,7 @@ describe('POST /auth/register', () => {
     done();
   });
 
-  // TODO Implement register restrictions like password length, strength, etc.
+  // TODO Implement register restrictions like password length, required fields, etc.
 });
 
 describe('POST /auth/verify-user-token', () => {

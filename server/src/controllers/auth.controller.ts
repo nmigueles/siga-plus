@@ -1,16 +1,22 @@
 import { Response, Request, NextFunction } from 'express';
 
-import AuthService from '../services/AuthServices';
 import { User } from 'models/User';
+
+import AuthService from '../services/AuthServices';
+
+import { validateLoginInput } from '../helpers/validateLoginInput';
 
 class AuthController {
   static async doLogin(req: Request, res: Response, next: NextFunction) {
     try {
-      const { username, password } = req.body;
+      const {
+        error,
+        value: { username, password },
+      } = validateLoginInput(req.body);
 
-      if (!username || !password) {
+      if (error) {
         res.status(400);
-        return next(new Error('Missing username or password field.'));
+        return next(error);
       }
 
       const { success, message, token } = await AuthService.login(username, password);

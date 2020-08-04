@@ -8,8 +8,13 @@ export interface NotasEvent {
   name: string;
   notas: Nota[];
 }
+interface Events {
+  'new-course': undefined;
+  'new-grade': undefined;
+}
+export type Event = keyof Events;
 
 export interface TrackerEvent {
-  event: string;
+  event: Event;
   data: CourseEvent[] | NotasEvent;
 }

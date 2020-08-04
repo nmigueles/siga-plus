@@ -26,14 +26,14 @@ export const errorHandler = (error: Error, req: Request, res: Response, next: Ne
 
 export const notifyUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
+    const { user_id } = req.params;
 
-    if (!id) {
+    if (!user_id) {
       res.status(400);
       throw new Error('User id not provided.');
     }
 
-    const expoPushToken = await UserService.getExpoToken(id);
+    const expoPushToken = await UserService.getExpoToken(user_id);
     if (!expoPushToken) {
       res.status(412);
       throw new Error('Expo push token was not found in user.');
