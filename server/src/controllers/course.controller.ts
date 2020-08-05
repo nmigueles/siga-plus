@@ -1,10 +1,14 @@
 import { ObjectID } from 'mongodb';
 import { Response, Request, NextFunction } from 'express';
 
-import CourseService from '../services/CourseServices';
-import Course from '../interfaces/CourseInterface';
-import Nota from 'interfaces/NotaInterface';
 import { User } from '../models/User';
+
+import CourseService from '../services/CourseServices';
+
+import Course from '../interfaces/CourseInterface';
+import Nota from '../interfaces/NotaInterface';
+
+import validateCourseInput from '../helpers/validateCourseInput';
 
 class CourseController {
   static async create(req: Request, res: Response, next: NextFunction) {
@@ -16,34 +20,23 @@ class CourseController {
         throw new Error('Expected logged user. Not found.');
       }
 
-      const {
-        nombre,
-        courseId,
-        dia,
-        curso,
-        turno,
-        hora,
-        horaT,
-        aula,
-        sede,
-        estado,
-        color,
-      } = req.body;
+      const { error, value: course } = validateCourseInput(req.body);
+
+      if (error) {
+        res.status(400);
+        return next(error);
+      }
+
+      if (await CourseService.courseExistInUser(user.id, course.courseId)) {
+        res.status(409);
+        return next(new Error('Course already exists.'));
+      }
 
       const newCourse: Course = {
-        nombre,
-        courseId,
-        dia,
-        curso,
-        turno,
-        hora,
-        horaT,
-        aula,
-        sede,
-        estado,
-        color,
+        ...course,
         userId: user.id,
       };
+
       const created = await CourseService.createCourse(newCourse);
       return res.json(created);
     } catch (error) {

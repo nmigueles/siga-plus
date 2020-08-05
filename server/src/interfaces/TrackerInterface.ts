@@ -14,6 +14,7 @@ interface Events {
 }
 export type Event = keyof Events;
 
+// @Deprecated
 export interface TrackerEvent {
   event: Event;
   data: CourseEvent[] | NotasEvent;

@@ -21,6 +21,12 @@ class CourseService {
     return course;
   }
 
+  static async courseExistInUser(userId: ObjectID, courseId: string): Promise<boolean> {
+    const courses = await this.getCoursesByUser(userId);
+    const course = courses.find(c => c.courseId === courseId);
+    return !!course;
+  }
+
   static async updateColor(courseId: string, newColor: string): Promise<Course> {
     const _id = new ObjectID(courseId);
     const updatedAsignatura = await courseModel.findOneAndUpdate(
@@ -35,16 +41,17 @@ class CourseService {
     return updatedAsignatura;
   }
 
-  static async newNota(course: Course, notas: Nota[]): Promise<Course> {
-    const newNotas: Nota[] = [...course.notas, ...notas];
-
-    console.log({ newNotas });
+  static async newNota(course: Course, newNotas: Nota[]): Promise<Course> {
+    if (!course) {
+      throw new Error('Course not found.');
+    }
+    const notas: Nota[] = [...course.notas, ...newNotas];
 
     const updatedCourse = await courseModel.findOneAndUpdate(
       { _id: course.id },
       {
         $set: {
-          notas: newNotas,
+          notas,
         },
       },
       { new: true }

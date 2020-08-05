@@ -14,9 +14,9 @@ export default interface Course {
   color: string;
   turno: Turno;
   notas?: Nota[];
-  dia: WeekDayNumber | WeekDayNumber[];
-  hora: string | string[];
-  horaT: string | string[];
+  dia: WeekDayNumber[];
+  hora: string[];
+  horaT: string[];
   aula: string;
   sede: string;
   estado: string;

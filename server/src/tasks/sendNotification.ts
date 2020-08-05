@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 /**
- * La función envia una notificación por medio de IFTTT
+ * La función envia una notificación a la aplicación
  * @param value1 Mensaje a enviar en el cuerpo de la notificación.
  */
 export const sendNotification = (body: string, title: string, expoPushToken: string) => {

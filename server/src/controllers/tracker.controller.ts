@@ -1,69 +1,54 @@
 import { ObjectID } from 'mongodb';
 import { Response, Request, NextFunction } from 'express';
 
-import CourseService from '../services/CourseServices';
-import Course from '../interfaces/CourseInterface';
-import Nota from 'interfaces/NotaInterface';
+import { Event } from '../interfaces/TrackerInterface';
+
+import TrackerService, { EventResponse } from '../services/TrackerServices';
 
 class TrackerController {
-  static async detectedNewCourse(req: Request, res: Response, next: NextFunction) {
+  static async eventHandler(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id } = req.params;
-      const courses: Course[] = req.body.data;
-
-      if (!id) {
-        res.status(400);
-        throw new Error('User id not provided.');
-      }
-      const userId = new ObjectID(id);
-
-      if (!courses || !(courses.length > 0)) {
-        res.status(400);
-        throw new Error('Courses not provided in body.');
-      }
-      const promises = courses.map(course => {
-        return CourseService.createCourse({ ...course, userId });
-      });
-      const result = await Promise.all(promises);
-
-      return res.json(result);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async detectedNewGrade(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id } = req.params;
-      interface NewGradeData {
-        courseId: string;
-        name: string;
-        notas: Nota[];
-      }
-
-      const data: NewGradeData = req.body.data;
-
-      if (!id) {
-        res.status(400);
-        throw new Error('User id not provided.');
-      }
-      const userId = new ObjectID(id);
+      const { user_id } = req.params;
+      const { event, data } = req.body;
 
       if (!data) {
         res.status(400);
-        throw new Error('Grades not provided in body.');
+        return next(new Error('Event data is required.'));
+      }
+      if (!event) {
+        res.status(400);
+        return next(new Error('Event type is required.'));
       }
 
-      const courses = await CourseService.getCoursesByUser(userId);
-      console.log(courses);
-      const course = courses.find(a => a.courseId === data.courseId);
-      if (!course) {
-        throw new Error('Course does not exists.');
-      }
-      const nota = await CourseService.newNota(course, data.notas);
+      const userId = new ObjectID(user_id);
 
-      return res.json(nota);
+      let eventResponse: EventResponse;
+
+      switch (event as Event) {
+        case 'new-course':
+          eventResponse = await TrackerService.eventNewCourse(userId, data);
+          break;
+        case 'new-grade':
+          eventResponse = await TrackerService.eventNewGrade(userId, data);
+          break;
+
+        default:
+          res.status(422);
+          return next(new Error('Invalid event.'));
+      }
+      if (!eventResponse.success) {
+        res.status(400);
+        throw new Error(eventResponse.reason);
+      }
+
+      return res.sendStatus(200);
     } catch (error) {
+      if (
+        error.message ===
+        'Argument passed in must be a single String of 12 bytes or a string of 24 hex characters'
+      ) {
+        return next(new Error('Invalid id format.'));
+      }
       return next(error);
     }
   }
