@@ -49,8 +49,9 @@ class UserService {
 
   static async getExpoToken(id: string | ObjectID): Promise<string> {
     try {
-      const user = await this.getUserById(id);
-      return user.expoPushToken;
+      const { expoPushToken } = await this.getUserById(id);
+      console.log({ expoPushToken });
+      return expoPushToken;
     } catch (error) {
       return '';
     }
