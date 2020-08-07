@@ -17,9 +17,8 @@ Aplicación movil desarrollada con React native.
 
 ## Tracking
 
-La aplicación utiliza una instancia de [SIGA Tracker](https://github.com/NicoMigueles/siga-tracker) en Heroku que detecta cambios en el siga y dispara webhooks cuando ocurren. Estos estan relacionados a un usuario mediante los siguientes endpoints:
+La aplicación utiliza una instancia de [SIGA Tracker](https://github.com/NicoMigueles/siga-tracker) en Heroku que detecta cambios en el siga y dispara webhooks cuando ocurren. Estos estan relacionados a un usuario mediante el siguiente endpoint:
 
-- Nueva nota: `<backend_url>/api/v1/detected-new/grade/<id>` donde `id` es el identificador único del usuario.
-- Nuevo curso: `<backend_url>/api/v1/detected-new/course/<id>` donde `id` es el identificador único del usuario.
+`<backend_url>/api/v1/tracker/event/<user_id>` donde `user_id` es el identificador único del usuario.
 
-La app emite una notificación y guarda la información para que dicho usuario pueda consumirla desde la aplicación.
+La app emite una notificación mediante expo y guarda la información del evento para que dicho usuario pueda consumirla desde la aplicación.
