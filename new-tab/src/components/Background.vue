@@ -1,33 +1,80 @@
 <template>
-  <div>
-    <h1 v-if="unsplash.loading">LOADING ....</h1>
-    <img v-if="!unsplash.loading" :src="imageSrc" />
-  </div>
+  <div ref="placeholder"></div>
 </template>
 
-<script setup>
-import { computed } from "vue";
-
+<script>
+import { computed, onMounted, ref, watchEffect } from "vue";
 import useUnsplash from "@/hooks/useUnsplash";
 
-export const unsplash = useUnsplash();
+export default {
+  setup() {
+    const unsplash = useUnsplash();
+    const placeholder = ref(null);
 
-export const color = computed(() => {
-  if (unsplash.data) {
-    return unsplash.data.color;
-  }
-  return "";
-});
-export const imageSrc = computed(() => {
-  if (unsplash.data) {
-    return unsplash.data.urls.full;
-  }
-  return "";
-});
+    const color = computed(() => {
+      if (unsplash.data) {
+        return unsplash.data.color;
+      }
+      return "";
+    });
+
+    const imageSrc = computed(() => {
+      if (unsplash.data) {
+        return unsplash.data.urls.full;
+      }
+      return "";
+    });
+    const lowSrc = computed(() => {
+      if (unsplash.data) {
+        return unsplash.data.urls.regular;
+      }
+      return "";
+    });
+
+    function loadImage() {
+      console.log("Loading new image...");
+      const img = new Image();
+      img.className = "bg";
+      img.src = lowSrc.value;
+      if (placeholder.value) {
+        placeholder.value.appendChild(img);
+      }
+
+      const imgFull = new Image();
+      imgFull.className = "bg";
+      imgFull.alt = "Background";
+      imgFull.src = imageSrc.value;
+
+      imgFull.onload = function () {
+        delete imgFull.onload;
+        if (placeholder.value) {
+          placeholder.value.removeChild(img);
+          placeholder.value.appendChild(imgFull);
+        }
+      };
+    }
+
+    onMounted(() => {
+      watchEffect(() => {
+        if (!unsplash.loading) {
+          loadImage();
+        }
+      });
+    });
+
+    return {
+      unsplash,
+      placeholder,
+      color,
+      imageSrc,
+      lowSrc,
+    };
+  },
+};
 </script>
 
-<style scoped>
-img {
+<style>
+.bg {
   position: absolute;
   top: 0;
   left: 0;

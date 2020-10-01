@@ -1,17 +1,31 @@
 <template>
-  <Clock />
-  <Background />
+  <main>
+    <SideBar left hcenter>
+      <Courses />
+    </SideBar>
+    <SideBar right>
+      <!-- <User /> -->
+    </SideBar>
+    <Clock />
+    <Background />
+  </main>
 </template>
 
 <script>
-import Clock from "@/components/Clock.vue";
-import Background from "@/components/Background.vue";
+// import User from "@/components/User";
+import Clock from "@/components/Clock";
+import SideBar from "@/components/SideBar";
+import Courses from "@/components/Courses";
+import Background from "@/components/Background";
 
 export default {
   name: "App",
   components: {
-    Background,
+    // User,
     Clock,
+    SideBar,
+    Courses,
+    Background,
   },
 };
 </script>
@@ -24,6 +38,13 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: white;
-  background-color: black;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
 }
 </style>

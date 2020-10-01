@@ -1,0 +1,29 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "authentication": {
+    "entity": "user",
+    "service": "users",
+    "secret": "VJUB/GO14W0poRBf8BkxYio+XT4=",
+    "authStrategies": ["jwt", "local"],
+    "jwtOptions": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "issuer": "sigaplus",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "usernameField": "\\username",
+      "passwordField": "password"
+    }
+  },
+  "mongodb": "mongodb+srv://nmigueles:2DzLR7jX2zER2ZFW@maincluster-dffzn.gcp.mongodb.net/v2Dev?retryWrites=true&w=majority"
+}
