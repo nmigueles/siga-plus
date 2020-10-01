@@ -1,7 +1,7 @@
 <template>
   <main>
     <SideBar left hcenter>
-      <!-- <Courses /> -->
+      <Courses />
     </SideBar>
     <SideBar right>
       <!-- <User /> -->
@@ -15,7 +15,7 @@
 // import User from "@/components/User";
 import Clock from "@/components/Clock";
 import SideBar from "@/components/SideBar";
-// import Courses from "@/components/Courses";
+import Courses from "@/components/Courses";
 import Background from "@/components/Background";
 
 export default {
@@ -24,7 +24,7 @@ export default {
     // User,
     Clock,
     SideBar,
-    // Courses,
+    Courses,
     Background,
   },
 };

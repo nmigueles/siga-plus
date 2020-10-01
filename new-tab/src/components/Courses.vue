@@ -1,41 +1,22 @@
 <template>
   <div class="container">
-    <div class="course" v-for="course in courses" :key="course.id">
+    <!-- <div class="course" v-for="course in courses" :key="course.id">
       <div class="name">{{ course.name }}</div>
       <div class="actions">
         <a class="meet" :href="course.actions.meet">Meet</a>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
+import useSiga from "@/hooks/useSiga";
 export default {
   setup() {
+    const siga = useSiga();
+
     return {
-      courses: [
-        {
-          id: "1",
-          name: "Algoritmos",
-          actions: {
-            meet: "https://meet.google.com/hot-shsw-nrw?authuser=1",
-          },
-        },
-        {
-          id: "2",
-          name: "Arquitectura",
-          actions: {
-            meet: "https://meet.google.com/hot-shsw-nrw?authuser=1",
-          },
-        },
-        {
-          id: "3",
-          name: "Sistemas y Organizaciones",
-          actions: {
-            meet: "https://meet.google.com/hot-shsw-nrw?authuser=1",
-          },
-        },
-      ],
+      siga,
     };
   },
 };
