@@ -1,26 +1,19 @@
+// tracker-model.js - A mongoose model
+//
+// See http://mongoosejs.com/docs/models.html
+// for more of what you can do here.
 import { Application } from '../declarations';
 import { Model, Mongoose } from 'mongoose';
 
-const stringRequired = { type: String, required: true };
-
 export default function (app: Application): Model<any> {
-  const modelName = 'courses';
+  const modelName = 'tracker';
   const mongooseClient: Mongoose = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
       userId: { type: Schema.Types.ObjectId, ref: 'users' },
-      courseSigaId: stringRequired, // 082020
-      name: stringRequired, // Matemática Discreta
-      colour: stringRequired,
-      course: stringRequired, // K1021
-      shift: stringRequired, // Mañana
-      day: { type: [Number], required: true }, // [ 3 ]
-      startHour: { type: [String], required: true }, // [8:30]
-      finishHour: { type: [String], required: true }, // [12:30]
-      classroom: stringRequired, // S06
-      campus: stringRequired, // Medrano
-      state: { type: String, default: 'Cursando' },
+      event: { type: String, required: true }, // Event name
+      data: { type: Object },
     },
     {
       timestamps: true,
