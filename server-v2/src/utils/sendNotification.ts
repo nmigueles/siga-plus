@@ -1,10 +1,16 @@
-import Axios, { AxiosResponse } from 'axios';
+import { Application } from '@feathersjs/feathers';
+import Axios from 'axios';
 
 /**
  * La función envia una notificación a la aplicación
  * @param value1 Mensaje a enviar en el cuerpo de la notificación.
  */
-export const sendNotification = (body: string, title: string, expoPushToken: string): void => {
+export const sendNotification = (
+  app: Application,
+  body: string,
+  title: string,
+  expoPushToken: string
+): void => {
   try {
     Axios.post(
       'https://exp.host/--/api/v2/push/send',
@@ -26,9 +32,13 @@ export const sendNotification = (body: string, title: string, expoPushToken: str
     );
   } catch (error) {
     Axios.post(
-      'https://maker.ifttt.com/trigger/notify/with/key/j-XX_O_dBURjDrOFyx2xdcSefeA0BeI-xcF2fen_gW9',
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      app.get('discord_webhook'),
+      { content: `No se pudo enviar la notificación a la app, error_msg: ${error.message}` },
       {
-        value1: `No se pudo enviar la notificación a la app, error_msg: ${error.message}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
     );
   }

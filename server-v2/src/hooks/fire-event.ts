@@ -4,44 +4,73 @@
 import { Hook, HookContext, Application } from '@feathersjs/feathers';
 import notasToString from '../utils/notasToString';
 import { sendNotification } from '../utils/sendNotification';
-
-export interface EventData {
-  courses?: any[];
-  grades?: any[];
+interface TrackerCourse {
+  courseId: string;
+  curso: string;
+  nombre: string;
+  aula: string;
+  sede: string;
+  turno: string;
+  color: string;
+  dia: number[];
+  hora: string[];
+  horaT: string[];
+}
+interface TrackerGrade {
+  courseId: string; // courseSigaId in our model.
+  name: string;
+  notas: {
+    instancia: string;
+    calificacion: number;
+  }[];
 }
 
 async function eventNewGrade(
   app: Application,
   userId: string,
   expoPushToken: string,
-  { grades }: EventData
+  { grades }: { grades: TrackerGrade[] }
 ) {
   // Bussiness logic for detecting a new grade.
   if (!grades) throw new Error('No grades provided.');
 
-  const courses = await app.service('courses').find({ userId });
+  const { data: courses } = await app.service('courses').find();
   console.log(courses);
+  const byCourseSigaId = courses.reduce(
+    (byId: Record<string, any>, course: { courseSigaId: string }) => {
+      byId[course.courseSigaId] = course;
+      return byId;
+    },
+    {}
+  );
 
-  const promises = grades.map(grade => {
-    if (expoPushToken) {
-      const notas: string = notasToString(grade.notas);
-      sendNotification(
-        `Se detectaron nuevas notas te sacaste un ${notas}} en ${grade.name}`,
-        'Nueva nota',
-        expoPushToken
-      );
+  console.log(byCourseSigaId);
+
+  for await (const trackerGrade of grades) {
+    if (trackerGrade.notas.length) {
+      if (expoPushToken) {
+        const notas: string = notasToString(trackerGrade.notas);
+        sendNotification(
+          app,
+          `Se detectaron nuevas notas te sacaste un ${notas}} en ${trackerGrade.name}`,
+          'Nueva nota',
+          expoPushToken
+        );
+      }
+      const courseId = byCourseSigaId[trackerGrade.courseId]._id;
+
+      trackerGrade.notas.map(({ instancia: instance, calificacion: value }) => {
+        return app.service('grades').create({ courseId, instance, value });
+      });
     }
-    const course = courses.find((a: { courseId: string }) => a.courseId === grade.courseId);
-    return app.service('courses').create(course, grade.notas);
-  });
-  await Promise.all(promises);
+  }
 }
 
 async function eventNewCourse(
   app: Application,
   userId: string,
   expoPushToken: string,
-  { courses }: EventData
+  { courses }: { courses: TrackerCourse[] }
 ) {
   // Bussiness logic for detecting a new course.
   if (!courses) throw new Error('No courses provided.');
@@ -49,6 +78,7 @@ async function eventNewCourse(
   if (expoPushToken) {
     const len = courses.length;
     sendNotification(
+      app,
       `Se ${len === 1 ? 'detectó un nuevo curso.' : `detectaron ${len} nuevos cursos.`}`,
       len === 1 ? 'Nuevo curso' : 'Nuevos cursos',
       expoPushToken

@@ -25,5 +25,6 @@
       "passwordField": "password"
     }
   },
-  "mongodb": "mongodb+srv://nmigueles:2DzLR7jX2zER2ZFW@maincluster-dffzn.gcp.mongodb.net/v2Dev?retryWrites=true&w=majority"
+  "mongodb": "mongodb+srv://nmigueles:2DzLR7jX2zER2ZFW@maincluster-dffzn.gcp.mongodb.net/v2Dev?retryWrites=true&w=majority",
+  "discord_webhook": "WEBHOOK_DISCORD"
 }
