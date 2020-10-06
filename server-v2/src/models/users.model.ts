@@ -1,7 +1,17 @@
 import { Application } from '../declarations';
-import { Model, Mongoose } from 'mongoose';
+import { Model, Mongoose, Document } from 'mongoose';
 
-export default function (app: Application): Model<any> {
+export interface User extends Document {
+  username: string;
+  password: string;
+  fullname: string;
+  degree: string;
+  avatar: string;
+  locked: boolean;
+  expoPushToken: string;
+}
+
+export default function (app: Application): Model<User> {
   const modelName = 'users';
   const mongooseClient: Mongoose = app.get('mongooseClient');
   const schema = new mongooseClient.Schema(
@@ -24,5 +34,5 @@ export default function (app: Application): Model<any> {
   if (mongooseClient.modelNames().includes(modelName)) {
     (mongooseClient as any).deleteModel(modelName);
   }
-  return mongooseClient.model<any>(modelName, schema);
+  return mongooseClient.model<User>(modelName, schema);
 }
