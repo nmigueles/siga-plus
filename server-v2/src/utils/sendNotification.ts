@@ -3,14 +3,13 @@ import Axios from 'axios';
 
 /**
  * La función envia una notificación a la aplicación
- * @param value1 Mensaje a enviar en el cuerpo de la notificación.
  */
-export const sendNotification = (
+export default function (
   app: Application,
   body: string,
   title: string,
   expoPushToken: string
-): void => {
+): void {
   try {
     Axios.post(
       'https://exp.host/--/api/v2/push/send',
@@ -42,4 +41,4 @@ export const sendNotification = (
       }
     );
   }
-};
+}

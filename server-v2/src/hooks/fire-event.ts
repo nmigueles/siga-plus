@@ -1,53 +1,39 @@
-/* eslint-disable indent */
-// Use this hook to manipulate incoming or outgoing data.
-// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
-import { Hook, HookContext, Application } from '@feathersjs/feathers';
-import notasToString from '../utils/notasToString';
-import { sendNotification } from '../utils/sendNotification';
-interface TrackerCourse {
-  courseId: string;
-  curso: string;
-  nombre: string;
-  aula: string;
-  sede: string;
-  turno: string;
-  color: string;
-  dia: number[];
-  hora: string[];
-  horaT: string[];
-}
-interface TrackerGrade {
-  courseId: string; // courseSigaId in our model.
-  name: string;
-  notas: {
-    instancia: string;
-    calificacion: number;
-  }[];
-}
+import { Hook, HookContext } from '@feathersjs/feathers';
+import { Application } from '../declarations';
+import { ServiceResponse, TrackerGrade, TrackerCourse } from '../interfaces';
+import { Course } from '../models/courses.model';
+import { MTracker } from '../models/tracker.model';
 
-async function eventNewGrade(
-  app: Application,
-  userId: string,
-  expoPushToken: string,
-  { grades }: { grades: TrackerGrade[] }
-) {
+import { notasToString, sendNotification } from '../utils';
+
+async function eventNewGrade(app: Application, expoPushToken: string, grades: TrackerGrade[]) {
   // Bussiness logic for detecting a new grade.
-  if (!grades) throw new Error('No grades provided.');
 
-  const { data: courses } = await app.service('courses').find();
-  console.log(courses);
-  const byCourseSigaId = courses.reduce(
-    (byId: Record<string, any>, course: { courseSigaId: string }) => {
-      byId[course.courseSigaId] = course;
-      return byId;
-    },
-    {}
-  );
+  const { data: courses } = (await app.service('courses').find()) as ServiceResponse<Course>;
 
-  console.log(byCourseSigaId);
+  const byCourseSigaId = courses.reduce((byId: Record<string, Partial<Course>>, course) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    byId[course.courseSigaId!] = course;
+    return byId;
+  }, {});
 
   for await (const trackerGrade of grades) {
     if (trackerGrade.notas.length) {
+      try {
+        const courseId = byCourseSigaId[trackerGrade.courseId]._id;
+        await Promise.all(
+          trackerGrade.notas.map(({ instancia: instance, calificacion: value }) => {
+            return app.service('grades').create({ courseId, instance, value });
+          })
+        );
+      } catch (error) {
+        if (error instanceof TypeError) {
+          throw new Error(`The courseSigaId ${trackerGrade.courseId} does not exist.`);
+        } else {
+          throw error;
+        }
+      }
+
       if (expoPushToken) {
         const notas: string = notasToString(trackerGrade.notas);
         sendNotification(
@@ -57,11 +43,6 @@ async function eventNewGrade(
           expoPushToken
         );
       }
-      const courseId = byCourseSigaId[trackerGrade.courseId]._id;
-
-      trackerGrade.notas.map(({ instancia: instance, calificacion: value }) => {
-        return app.service('grades').create({ courseId, instance, value });
-      });
     }
   }
 }
@@ -70,10 +51,27 @@ async function eventNewCourse(
   app: Application,
   userId: string,
   expoPushToken: string,
-  { courses }: { courses: TrackerCourse[] }
+  courses: TrackerCourse[]
 ) {
   // Bussiness logic for detecting a new course.
-  if (!courses) throw new Error('No courses provided.');
+  // Create new courses
+  await Promise.all(
+    courses.map(course => {
+      const newCourse: Partial<Course> = {
+        courseSigaId: course.courseId,
+        name: course.nombre,
+        colour: course.color,
+        course: course.curso,
+        shift: course.turno,
+        classroom: course.aula,
+        campus: course.sede,
+        day: course.dia,
+        startHour: course.hora,
+        finishHour: course.horaT,
+      };
+      app.service('courses').create({ ...newCourse, userId });
+    })
+  );
 
   if (expoPushToken) {
     const len = courses.length;
@@ -84,36 +82,36 @@ async function eventNewCourse(
       expoPushToken
     );
   }
-
-  // Create new courses
-  await Promise.all(
-    courses.map(course => {
-      app.service('courses').create({ ...course, userId });
-    })
-  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (options = {}): Hook => {
-  return async (context: HookContext): Promise<HookContext> => {
+  return async (context: HookContext<MTracker>): Promise<HookContext<MTracker>> => {
     // Fire event
-    if (context.type !== 'after') throw new Error('The hook is an after hook only.');
+    if (context.type !== 'after') {
+      throw new Error('The fire-event hook is available only as an after hook.');
+    }
 
     if (context.result) {
+      const app = context.app as Application;
       const { event, data, userId } = context.result;
-      const user = await context.app.service('users').get(userId);
+      const user = await app.service('users').get(userId);
 
+      /* eslint-disable indent */
       switch (event) {
         case 'new-course':
-          await eventNewCourse(context.app, userId, user.expoPushToken, data);
+          if (!data.courses) throw new Error('Courses data not provided in related event.');
+          await eventNewCourse(app, userId, user.expoPushToken, data.courses);
           break;
         case 'new-grade':
-          await eventNewGrade(context.app, userId, user.expoPushToken, data);
+          if (!data.grades) throw new Error('Grades data not provided in related event.');
+          await eventNewGrade(app, user.expoPushToken, data.grades);
           break;
 
         default:
           throw new Error('Event not found.');
       }
+      /* eslint-enable indent */
     }
     return context;
   };

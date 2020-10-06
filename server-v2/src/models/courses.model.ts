@@ -1,9 +1,25 @@
 import { Application } from '../declarations';
-import { Model, Mongoose } from 'mongoose';
+import { Document, Model, Mongoose } from 'mongoose';
+import { User } from './users.model';
+
+export interface Course extends Document {
+  userId: User['_id'];
+  courseSigaId: string;
+  name: string;
+  colour: string;
+  course: string;
+  shift: string;
+  classroom: string;
+  campus: string;
+  day: number[];
+  startHour: string[];
+  finishHour: string[];
+  state: string;
+}
 
 const stringRequired = { type: String, required: true };
 
-export default function (app: Application): Model<any> {
+export default function (app: Application): Model<Course> {
   const modelName = 'courses';
   const mongooseClient: Mongoose = app.get('mongooseClient');
   const { Schema } = mongooseClient;
@@ -15,11 +31,11 @@ export default function (app: Application): Model<any> {
       colour: stringRequired,
       course: stringRequired, // K1021
       shift: stringRequired, // Mañana
+      classroom: stringRequired, // S06
+      campus: stringRequired, // Medrano
       day: { type: [Number], required: true }, // [ 3 ]
       startHour: { type: [String], required: true }, // [8:30]
       finishHour: { type: [String], required: true }, // [12:30]
-      classroom: stringRequired, // S06
-      campus: stringRequired, // Medrano
       state: { type: String, default: 'Cursando' },
     },
     {
@@ -32,5 +48,5 @@ export default function (app: Application): Model<any> {
   if (mongooseClient.modelNames().includes(modelName)) {
     (mongooseClient as any).deleteModel(modelName);
   }
-  return mongooseClient.model<any>(modelName, schema);
+  return mongooseClient.model<Course>(modelName, schema);
 }

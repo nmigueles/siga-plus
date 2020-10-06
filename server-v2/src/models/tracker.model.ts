@@ -4,6 +4,17 @@
 // for more of what you can do here.
 import { Application } from '../declarations';
 import { Model, Mongoose } from 'mongoose';
+import { User } from './users.model';
+import { TrackerCourse, TrackerGrade } from '../interfaces';
+
+export interface MTracker extends Document {
+  userId: User['_id'];
+  event: string;
+  data: {
+    courses?: TrackerCourse[];
+    grades?: TrackerGrade[];
+  };
+}
 
 export default function (app: Application): Model<any> {
   const modelName = 'tracker';

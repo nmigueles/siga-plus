@@ -1,13 +1,20 @@
 import { Application } from '../declarations';
-import { Model, Mongoose } from 'mongoose';
+import { Model, Mongoose, Document } from 'mongoose';
+import { Course } from './courses.model';
 
-export default function (app: Application): Model<any> {
+export interface Grade extends Document {
+  courseId: Course['_id'];
+  instance: string;
+  value: number;
+}
+
+export default function (app: Application): Model<Grade> {
   const modelName = 'grades';
   const mongooseClient: Mongoose = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema(
     {
-      courseId: { type: Schema.Types.ObjectId, ref: 'courses' },
+      courseId: { type: Schema.Types.ObjectId, ref: 'courses', required: true },
       instance: { type: String, required: true }, // "PP"
       value: { type: Number, required: true }, // 8
     },
@@ -21,5 +28,5 @@ export default function (app: Application): Model<any> {
   if (mongooseClient.modelNames().includes(modelName)) {
     (mongooseClient as any).deleteModel(modelName);
   }
-  return mongooseClient.model<any>(modelName, schema);
+  return mongooseClient.model<Grade>(modelName, schema);
 }
