@@ -5,7 +5,7 @@ import { Course } from '../models/courses.model';
 import { MTracker } from '../models/tracker.model';
 
 import { notasToString, sendNotification } from '../utils';
-
+// TODO Separar logica del guardado de información y el avisar al usuario. Este hook solo deberia contener la notificación.
 async function eventNewGrade(app: Application, expoPushToken: string, grades: TrackerGrade[]) {
   // Bussiness logic for detecting a new grade.
 

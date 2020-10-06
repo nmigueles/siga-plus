@@ -9,7 +9,7 @@
   "authentication": {
     "entity": "user",
     "service": "users",
-    "secret": "VJUB/GO14W0poRBf8BkxYio+XT4=",
+    "secret": "AUTH_SECRET",
     "authStrategies": ["jwt", "local"],
     "jwtOptions": {
       "header": {
@@ -22,9 +22,9 @@
     },
     "local": {
       "usernameField": "\\username",
-      "passwordField": "password"
+      "passwordField": "\\password"
     }
   },
-  "mongodb": "mongodb+srv://nmigueles:2DzLR7jX2zER2ZFW@maincluster-dffzn.gcp.mongodb.net/v2Dev?retryWrites=true&w=majority",
+  "mongodb": "MONGO_DB",
   "discord_webhook": "WEBHOOK_DISCORD"
 }
