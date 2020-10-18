@@ -20,7 +20,7 @@ export default {
 
     const imageSrc = computed(() => {
       if (unsplash.data) {
-        return unsplash.data.urls.full;
+        return unsplash.data.urls.raw;
       }
       return "";
     });

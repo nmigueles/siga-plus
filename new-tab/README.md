@@ -1,5 +1,7 @@
 # SIGA+ New Tab
 
-Vue 3 practice.
+<p align="middle">
+<img  width="80%" src="https://github.com/nicomigueles/siga-plus/blob/master/assets/newtab.jpg">
+</p>
 
-In development.
+Written in Vue 3.

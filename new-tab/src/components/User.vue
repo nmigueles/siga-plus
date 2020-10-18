@@ -1,14 +1,24 @@
 <template>
   <div class="container">
-    <span class="username">Nicolás Migueles</span>
+    <span class="username">{{ siga.user?.fullname }}</span>
     <div class="profile-picture">
-      <img src="avatar.png" alt="Profile picture" lazy />
+      <img :src="siga.user?.avatar" alt="Profile picture" lazy />
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import useSiga from "@/hooks/useSiga";
+
+export default {
+  setup() {
+    const siga = useSiga();
+
+    return {
+      siga,
+    };
+  },
+};
 </script>
 
 <style scoped>

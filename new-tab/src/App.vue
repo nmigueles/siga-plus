@@ -4,7 +4,7 @@
       <Courses />
     </SideBar>
     <SideBar right>
-      <!-- <User /> -->
+      <User />
     </SideBar>
     <Clock />
     <Background />
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-// import User from "@/components/User";
+import User from "@/components/User";
 import Clock from "@/components/Clock";
 import SideBar from "@/components/SideBar";
 import Courses from "@/components/Courses";
@@ -21,7 +21,7 @@ import Background from "@/components/Background";
 export default {
   name: "App",
   components: {
-    // User,
+    User,
     Clock,
     SideBar,
     Courses,
