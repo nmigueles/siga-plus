@@ -25,7 +25,7 @@ import { computed } from "vue";
 
 export default {
   setup() {
-    const today = (new Date().getDay() + 2) % 7;
+    const today = new Date().getDay();
     console.log(today);
     const siga = useSiga();
     const filtered = computed(() => {
