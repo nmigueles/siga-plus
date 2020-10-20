@@ -15,6 +15,7 @@ module.exports = {
     'no-nested-ternary': 'off',
     'react/display-name': 'off',
     'no-underscore-dangle': 'off',
+    'no-shadow': 'off',
   },
   globals: {
     fetch: true,
