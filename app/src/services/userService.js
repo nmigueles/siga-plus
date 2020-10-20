@@ -38,11 +38,9 @@ class UserService {
     try {
       const userToken = await AuthService.getUserToken();
       if (!userToken) throw new Error('Error getting token');
-      console.log(userToken);
       const body = JSON.stringify({
         token: expoPushToken,
       });
-      console.log(body);
       const response = await fetch(URI, {
         method: 'POST',
         headers: {

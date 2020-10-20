@@ -1,10 +1,21 @@
 /* eslint-disable no-alert */
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
-import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
 
-export default async function registerForPushNotificationsAsync() {
+export async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: 'Test Notification! 📬',
+      body: 'Here is the notification body',
+      data: { data: 'goes here' },
+    },
+    trigger: { seconds: 2 },
+  });
+}
+
+export async function registerForPushNotificationsAsync() {
   let token;
   if (Constants.isDevice) {
     const { status: existingStatus } = await Permissions.getAsync(
@@ -16,30 +27,22 @@ export default async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== 'granted') {
-      throw new Error('Failed to get push token for push notification!');
+      // eslint-disable-next-line no-undef
+      alert('Failed to get push token for push notification!');
+      return undefined;
     }
-    try {
-      const expoToken = await Notifications.getExpoPushTokenAsync();
-      token = expoToken;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error({ debug: 'Error en registerForPushNotificationsAsync.js', error });
-    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
   } else {
-    throw new Error('Must use physical device for Push Notifications');
+    // eslint-disable-next-line no-undef
+    alert('Must use physical device for Push Notifications');
   }
 
-  // Notifications.addListener(({ data }) => {
-  //   // eslint-disable-next-line no-console
-  //   console.log(data);
-  // });
-
   if (Platform.OS === 'android') {
-    Notifications.createChannelAndroidAsync('default', {
+    Notifications.setNotificationChannelAsync('default', {
       name: 'default',
-      sound: true,
-      priority: 'max',
-      vibrate: [0, 250, 250, 250],
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
     });
   }
 
